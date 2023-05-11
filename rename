@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Rename "tmp.zip" submissions to the proper submission zipfile format
+OUTPUT_DIRECTORY="submissions"
+
+if [[ ! -d $OUTPUT_DIRECTORY ]]; then
+    mkdir -p $OUTPUT_DIRECTORY
+fi
+
+source ./course.sh
+OUTPUT_FILEFORMAT="${name}_${student_number}.zip"
+
+section=$1
+
+OUTPUT_FILE="$OUTPUT_DIRECTORY/${section}_$OUTPUT_FILEFORMAT"
+mv "tmp.zip" $OUTPUT_FILE
