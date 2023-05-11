@@ -12,15 +12,21 @@ double multiply(double x, double y) {
 }
 
 double average(double x, double y) {
-  return sum(x, y) / 2.0;
+  return (sum(x, y) / 2.0);
 }
 
-void summarize(double x, double y) {
-  const char* summary_format = "The %s of %.2f and %.2f is %.2f\n";
+void summarize(char* arg1, char* arg2) {
+  // Convert strings arguments to doubles
+  // NOTE: The conversion from string to double is done directly since
+  // we still require the input strings in the summarize format to display the values
+  double x = atof(arg1);
+  double y = atof(arg2);
 
-  printf(summary_format, "sum", x, y, sum(x,y));
-  printf(summary_format, "product", x, y, multiply(x,y));
-  printf(summary_format, "average", x, y, average(x,y));
+  const char* summary_format = "The %s of %s and %s is %.2f\n";
+
+  printf(summary_format, "sum", arg1, arg2, sum(x,y));
+  printf(summary_format, "product", arg1, arg2, multiply(x,y));
+  printf(summary_format, "average", arg1, arg2, average(x,y));
 }
 
 int main(int argc, char** argv) {
@@ -30,14 +36,7 @@ int main(int argc, char** argv) {
     printf("Usage: %s [x] [y]\n", argv[0]);
     return -1;
   }
-  
-  // Convert strings arguments to doubles
-  char* arg1 = argv[1];
-  char* arg2 = argv[2];
-  
-  double x = atof(arg1);
-  double y = atof(arg2);
 
-  summarize(x, y);
+  summarize(argv[1], argv[2]);
   return 0;
 }
