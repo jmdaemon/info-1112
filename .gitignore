@@ -1,3 +1,4 @@
+*.out
 # Ignore archived oggex binaries
 _packages
 archive/*
