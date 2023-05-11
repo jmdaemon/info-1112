@@ -1,14 +1,18 @@
 #!/bin/bash
 
 # Rename "tmp.zip" submissions to the proper submission zipfile format
+
+# Store zip files in submissions
 OUTPUT_DIRECTORY="submissions"
 
+# Read student's course personal id info
+source ./course.sh
+OUTPUT_FILEFORMAT="${name}_${student_number}.zip"
+
+# Ensure these directories exist
 if [[ ! -d $OUTPUT_DIRECTORY ]]; then
     mkdir -p $OUTPUT_DIRECTORY
 fi
-
-source ./course.sh
-OUTPUT_FILEFORMAT="${name}_${student_number}.zip"
 
 section=$1
 

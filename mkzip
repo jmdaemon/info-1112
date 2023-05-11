@@ -1,18 +1,12 @@
 #!/bin/bash
 
 ## Submissions helper script for INFO 1112
+# Filters out unnecessary build artifacts and creates valid zip submission files
 
 # Include only these files
 include=(*.c *.cpp *.md *.sh Makefile)
 
-# Store zip files in submissions
-OUTPUT_DIRECTORY="submissions"
-OUTPUT_FILEFORMAT="${name}_${student_number}.zip"
-
 OUTPUT_TEMPDIR="tmp"
-
-# Read student's course personal id info
-./course.sh
 
 ## Helper Functions
 
@@ -30,10 +24,6 @@ collect_files() {
 }
 
 # Ensure these directories exist
-if [[ ! -d $OUTPUT_DIRECTORY ]]; then
-    mkdir -p $OUTPUT_DIRECTORY
-fi
-
 if [[ ! -d $OUTPUT_TEMPDIR ]]; then
     mkdir -p $OUTPUT_TEMPDIR
 fi
@@ -48,7 +38,7 @@ collect_files "$OUTPUT_TEMPDIR"
 # We filter out unnecessary files by globbing the results into an intermediate folder
 
 echo "Creating submission..."
-#zip -r "$OUTPUT_FILEFORMAT" "$OUTPUT_TEMPDIR"
 zip -r "$OUTPUT_TEMPDIR.zip" "$OUTPUT_TEMPDIR"
 
+# Remove old tmp directory
 rm -r "$OUTPUT_TEMPDIR"
