@@ -1,5 +1,10 @@
+submissions
+tmp
 bin
+build
+course.sh
 *.out
+
 # Ignore archived oggex binaries
 _packages
 archive/*
