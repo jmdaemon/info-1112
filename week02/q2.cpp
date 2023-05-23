@@ -15,16 +15,14 @@ void show(const char* arg1, const char* arg2, const char* arg3) {
   double cross_sect_area  = atof(arg2);
   double resitivity       = atof(arg3);
 
-  //const char* summary_format = "The material resistance for a material of \n\tlength %s of %s and %s is %.2f\n";
-  
-  auto print_aligned = [](const char* msg, const char* var) -> void {
-    std::cout << std::setw(24) << std::left << msg << std::right << var << std::endl;
+  auto print_aligned_units = [](const char* msg, const char* var, const char* units) -> void {
+    std::cout << std::setw(24) << std::left << msg << std::right << var << units << std::endl;
   };
+
   std::cout << "For a material with the following requirements\n";
-  //std::cout << std::setw(16) << std::left << "Length" << std::right << arg1;
-  print_aligned("Length", arg1);
-  print_aligned("Cross Sectional Area", arg2);
-  print_aligned("Resitivity", arg3);
+  print_aligned_units("Length", arg1, "m");
+  print_aligned_units("Cross Sectional Area", arg2, "m^2");
+  print_aligned_units("Resitivity", arg3, "Ω-meters");
 
   double resistance = calc_material_resistance(length, cross_sect_area, resitivity);
   std::cout << "The material resistance is " << resistance << "Ω\n";
