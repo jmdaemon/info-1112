@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <cstdio>
 #include <cstdlib>
 
@@ -31,15 +33,22 @@ void show_weekly_salary(double wage, int hours) {
 }
 
 int main(int argc, char** argv) {
+  double wage;
+  int hours;
+
   // Process command line arguments
   if ((argc < 3) || (argc > 3)) {
-    puts("Error. Invalid number of arguments.");
-    printf("Usage: %s [Wages per hour] [Number of hours worked]\n", argv[0]);
-    return -1;
+    // If no valid commmand line arguments are given
+    std::cout << "Weekly Wage Calculator\n";
+    std::cout << "Please enter your wage rate ($/hr): ";
+    std::cin >> wage;
+    std::cout << "Please enter your hours worked this week: ";
+    std::cin >> hours;
+  } else {
+    wage = atof(argv[1]);
+    hours = atof(argv[2]);
   }
 
-  double wage = atof(argv[1]);
-  int hours = atof(argv[2]);
   show_weekly_salary(wage, hours);
 
   return 0;
