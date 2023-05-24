@@ -30,26 +30,23 @@ double calc_waist_size (double weight) {
 }
 
 void show(double weight, double height) {
-  
-  const char* display_format = "%s: %2.f\n";
-  
-  // Use two significant digits
-  //std::cout << std::setprecision(2) << std::noshowpoint;
+  // Round decimal numbers to whole numbers
+  std::cout << std::fixed << std::noshowpoint << std::setprecision(0);
 
-  //auto print_aligned = [](const char* msg, auto var) {
-    //std::cout << std::setw(24) << std::left << msg << std::right << var << std::endl;
-  //};
+  auto print_aligned = [](const char* msg, auto var) {
+    std::cout << std::setw(24) << std::left << msg << std::right << var << std::endl;
+  };
 
-  //auto print_size = []() {
-  //}
+  auto print_size = [&](const char* size_variant, double size) {
+    std::string s = "Your ";
+                s += std::string(size_variant);
+                s += " size is: ";
+    print_aligned(s.c_str(), size);
+  };
 
-  //print_aligned("Your hat size is: ", calc_hat_size(weight, height));
-  //print_aligned("Your jacket size is: ", calc_jacket_size(weight, height));
-  //print_aligned("Your waist size is: ", calc_waist_size(weight));
-  
-  printf(display_format, "Your hat size is", calc_hat_size(weight, height));
-  printf(display_format, "Your jacket size is", calc_jacket_size(weight, height));
-  printf(display_format, "Your waist size is", calc_waist_size(weight));
+  print_size("hat", calc_hat_size(weight, height));
+  print_size("jacket", calc_jacket_size(weight, height));
+  print_size("waist", calc_waist_size(weight));
 }
 
 int main(int argc, char** argv) {
