@@ -20,17 +20,6 @@ auto seconds_to_24hr(int seconds) {
   remainder = ((remainder - mm) * 3600) / 60.0;
   int ss = round(remainder);
 
-  //int mm = (int) ((seconds - (hh * 3600)) / 60);
-  //int ss = (int) (seconds / 60);
-
-  //int mm = (int) ((seconds - (hh * 3600) % 60));
-  //int ss = (int) (seconds / 60);
-
-  //int mm = (int) ((seconds - (hh * 3600)) / 60);
-  //int ss = (int) (seconds / 60);
-
-
-
   return std::make_tuple(hh, mm, ss);
 }
 
