@@ -26,8 +26,11 @@ q6: bin
 q7: bin
 	$(CC) $(CFLAGS) q7.cpp -o bin/q7
 
+q8: bin
+	$(CC) $(CFLAGS) q8.cpp -o bin/q8
 
-all: q1 q2 q3 q4 q5 q6 q7
+
+all: q1 q2 q3 q4 q5 q6 q7 q8
 
 bin:
 	mkdir bin
