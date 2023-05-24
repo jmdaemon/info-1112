@@ -34,7 +34,7 @@ void show(double weight, double height) {
   const char* display_format = "%s: %2.f\n";
   
   // Use two significant digits
-  std::cout << std::setprecision(2) << std::noshowpoint;
+  //std::cout << std::setprecision(2) << std::noshowpoint;
 
   //auto print_aligned = [](const char* msg, auto var) {
     //std::cout << std::setw(24) << std::left << msg << std::right << var << std::endl;
@@ -49,7 +49,7 @@ void show(double weight, double height) {
   
   printf(display_format, "Your hat size is", calc_hat_size(weight, height));
   printf(display_format, "Your jacket size is", calc_jacket_size(weight, height));
-  printf(display_format, "Your waist size is", calc_jacket_size(weight, height));
+  printf(display_format, "Your waist size is", calc_waist_size(weight));
 }
 
 int main(int argc, char** argv) {
