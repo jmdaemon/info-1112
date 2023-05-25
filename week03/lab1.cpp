@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cstdio>
 
 auto get_user_input() {
   int minutes;
@@ -13,8 +12,9 @@ int mm_get_hh(int minutes) {
 }
 
 int mm_get_hh_remainder(int minutes) {
-  int hh = mm_get_hh(minutes);
-  return (minutes - hh * 60);
+  //int hh = mm_get_hh(minutes);
+  //return (minutes - hh * 60);
+  return minutes % 60;
 }
 
 int pdt_to_edt(int hours) {
@@ -33,17 +33,19 @@ void show(int minutes) {
   int hours_adt = pdt_to_adt(hours_pdt);
 
   // Show the current time
-  const char* display_format = "%d:%d\n";
+  //const char* display_format = "%d:%d\n";
   
-  auto show_time = [&](int hh, int minutes) {
+  auto show_time = [&](int minutes, int hh, const char* timezone) {
     int mm = mm_get_hh_remainder(minutes);
-    printf(display_format, hh, mm);
+    std::cout 
+      << timezone << " minutes " << mm
+      << " hours " << hh << std::endl;
+    //printf(display_format, hh, mm);
   };
 
-  show_time(hours_pdt, minutes);
-  show_time(hours_adt, minutes);
-  show_time(hours_edt, minutes);
-  
+  show_time(minutes, hours_pdt, "PDT");
+  show_time(minutes, hours_adt, "EDT");
+  show_time(minutes, hours_edt, "ADT");
 }
 
 int main() {
