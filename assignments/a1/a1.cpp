@@ -16,6 +16,21 @@
      #include <unistd.h>
 #endif
 
+// Cross platform pause function
+// Requires:
+// - unistd.h on linux platforms
+void cppause(const char* linux_prompt, const char* windows_prompt) {
+  // Pause the executable for some time until the user decides to quit.
+  #ifdef __linux__
+    puts(linux_prompt);
+    pause(); // To quit, user must CTRL^C
+  #elif _WIN32
+    if (windows_prompt != NULL)
+      puts(windows_prompt);
+    system("pause");
+  #endif
+}
+
 auto get_user_input() {
   // Prompt user for first and last names
   std::string fname, lname, address;
@@ -42,18 +57,32 @@ void show_student_advisor(std::string student_choice) {
     printf("Are you an International or Domestic KPU student? [I/D]: ");
     std::cin >> student_type;
 
-    if (student_type =='I' || student_type == 'i')
-      puts("Please see an international advisor");
-    else if (student_type =='D' || student_type == 'd')
-      puts("Please see a domestic advisor");
-    else {
-      puts("Error: Your choice is invalid. Please input either I or D");
-      puts("Exiting program.");
-      exit(-1);
-    }
-  } else if (student_choice == "No" || student_choice == "no") {
+    // Direct students to correct advisor
+    // 1. Using if-else statements
+    //if (student_type =='I' || student_type == 'i')
+      //puts("Please see an international advisor");
+    //else if (student_type =='D' || student_type == 'd')
+      //puts("Please see a domestic advisor");
+    //else {
+      //puts("Error: Your choice is invalid. Please input either I or D");
+      //puts("Exiting program.");
+      //exit(-1);
+    //}
+  //} else if (student_choice == "No" || student_choice == "no") {
+    //puts("Thank you for completing our short survey");
+  //}
+
+    // 2. Using switch statements
+    switch(student_type) {
+      case 'd': case 'D': puts("Please see a domestic advisor");        break;
+      case 'i': case 'I': puts("Please see an international advisor");  break;
+      default:
+        puts("Error: Your choice is invalid. Please input either I or D");
+        puts("Exiting program.");
+        exit(-1);
+      }
+    } else if (student_choice == "No" || student_choice == "no") {
     puts("Thank you for completing our short survey");
-    // Do nothing
   }
 }
 
@@ -66,12 +95,6 @@ void show() {
 
 int main() {
   show();
-  // Pause the executable for some time until the user decides to quit.
-  #ifdef __linux__
-    puts("Hit CTRL^C to exit...");
-    pause(); // To quit, user must CTRL^C
-  #elif _WIN32
-    system("pause");
-  #endif
+  cppause("Hit CTRL^C to exit...", NULL);
   return 0;
 }
