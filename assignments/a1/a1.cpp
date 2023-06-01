@@ -50,12 +50,15 @@ auto get_user_input() {
   return std::make_tuple(fname, lname, address, student_choice);
 }
 
-//std::string capitalize(std::string s) {
-//}
+std::string capitalize(std::string &s) {
+  s[0] = toupper(s[0]);
+  return s;
+}
 
 // Direct KPU students to appropriate student advisor
 void show_student_advisor(std::string student_choice) {
-  if (student_choice == "Yes" || student_choice == "yes") {
+  student_choice = capitalize(student_choice);
+  if (student_choice == "Yes") {
     char student_type;
     printf("Are you an International or Domestic KPU student? [I/D]: ");
     std::cin >> student_type;
@@ -84,7 +87,7 @@ void show_student_advisor(std::string student_choice) {
         puts("Exiting program.");
         exit(-1);
       }
-    } else if (student_choice == "No" || student_choice == "no") {
+    } else if (student_choice == "No") {
     puts("Thank you for completing our short survey");
   }
 }
