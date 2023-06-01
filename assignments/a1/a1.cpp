@@ -50,6 +50,9 @@ auto get_user_input() {
   return std::make_tuple(fname, lname, address, student_choice);
 }
 
+//std::string capitalize(std::string s) {
+//}
+
 // Direct KPU students to appropriate student advisor
 void show_student_advisor(std::string student_choice) {
   if (student_choice == "Yes" || student_choice == "yes") {
@@ -73,9 +76,9 @@ void show_student_advisor(std::string student_choice) {
   //}
 
     // 2. Using switch statements
-    switch(student_type) {
-      case 'd': case 'D': puts("Please see a domestic advisor");        break;
-      case 'i': case 'I': puts("Please see an international advisor");  break;
+    switch(toupper(student_type)) {
+      case 'I': puts("Please see an international advisor");  break;
+      case 'D': puts("Please see a domestic advisor");        break;
       default:
         puts("Error: Your choice is invalid. Please input either I or D");
         puts("Exiting program.");
