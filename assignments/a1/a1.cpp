@@ -11,6 +11,11 @@
 
 #include <cstdio>
 
+// Includes `pause()` on Linux
+#ifdef __linux__
+     #include <unistd.h>
+#endif
+
 auto get_user_input() {
   std::string fname, lname, address;
 
@@ -32,5 +37,11 @@ void show() {
 
 int main() {
   show();
+  // Pause the executable for some time until the user decides to quit.
+  #ifdef __linux__
+    pause(); // To quit, user must CTRL^C
+  #elif _WIN32
+    system("pause");
+  #endif
   return 0;
 }
