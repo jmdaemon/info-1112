@@ -1,0 +1,15 @@
+Q: What is the output of the following code?
+int a = 15 ;
+int b = 6 , c;
+a = b + 3 ;
+c = a / 3 + b;
+cout << a << “ “ << b << “ “ << c;
+
+A: The output is: 9 6 11
+
+Program Annotation:
+int a = 15 ;                        // Declares integer a=15
+int b = 6 , c;                      // Declares integer b=6, c
+a = b + 3 ;                         // Integer arithmetic a = 6 + 3, a = 9. This overwrites the previous value of "a"
+c = a / 3 + b;                      // Integer division + arithmetic, by order of operations, c = 15 / 3 + 6, c = 5 + 6, c = 11
+cout << a << “ “ << b << “ “ << c;  // Outputs (without end line character): 9 6 11

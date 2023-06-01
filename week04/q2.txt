@@ -1,0 +1,25 @@
+Q: What is the output of the following code?
+int a = 10, y = 5, x;
+a *= 2;
+x = a + 7 / 3 * 6 % y;
+cout << a << “ “ << x;
+
+A: The output is: 20 12
+
+Program Annotation:
+
+int a = 10, y = 5, x;       // Declares integers a = 10, y = 5, x
+a *= 2;                     // Multiplies (in place) a by 2, a = 20 now.
+x = a + 7 / 3 * 6 % y;      // Arithmetic operation. Note that /, *, % all have the same precedence.
+                            // x = 10 + 7 / 3 * 6 % 5
+                            // Wrong:
+                            // x = 10 + 2 * 6 % 5
+                            // x = 10 + 12 % 5
+                            // x = 10 + 2
+                            // x = 12
+                            // Right:
+                            // x = 20 + 2 * 6 % 5
+                            // x = 20 + 12 % 5
+                            // x = 20 + 2
+                            // x = 22
+cout << a << “ “ << x;      // Outputs: 20 12
