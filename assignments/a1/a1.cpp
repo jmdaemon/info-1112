@@ -7,17 +7,17 @@
 
 #include <iostream>
 #include <string>
+#include <tuple>
 
 #include <cstdio>
-#include <tuple>
 
 auto get_user_input() {
   std::string fname, lname, address;
 
-  //std::cout << "Please enter your first and last name: ";
   printf("Please enter your first and last name: ");
   std::cin >> fname >> lname;
   
+  std::cin.ignore(); // Clear the buffer
   printf("Please enter your full address: ");
   getline(std::cin, address);
 
