@@ -1,8 +1,15 @@
+/**
+  Joseph Diza
+  100427500
+*/
 #include <iostream>
 #include <string>
 #include <tuple>
+//#include <array>
 
 #include <cstdio>
+
+const char* ERROR_INVALID_INPUT = "Error: Your input was invalid.";
 
 /** Library Functions **/
 
@@ -15,8 +22,9 @@ std::string prompt(const char* msg) {
 }
 
 /** Returns true if the input was valid, and false otherwise **/
+//bool accept_only(std::string valid_inputs[], std::string input) {
 bool accept_only(std::string valid_inputs[], std::string input) {
-  for (auto valid_input = valid_inputs->begin(); valid_input != valid_inputs->end(); ++valid_input) {
+  for (auto valid_input = valid_inputs->begin(); valid_input != valid_inputs->end(); valid_input = std::next(valid_input)) {
     if (input == valid_input.base())
       return true;
   }
@@ -32,7 +40,7 @@ std::string accept_only_valid_inputs(const char* msg, const char* error_prompt, 
   bool input_is_valid = accept_only(valid_inputs, input);
   while (!input_is_valid) {
     // Display the error message
-    printf("%s", error_prompt);
+    printf("%s\n", error_prompt);
 
     // Force user to give valid input
     input = prompt(msg);
@@ -54,11 +62,9 @@ auto get_user_input() {
 auto get_vehicle_condition() {
   printf("Allow us to check the safety of your vehicle. Please answer the following questions.\n");
 
-  const char* invalid_input = "Error: Your input was invalid.";
-
-  std::string oil_level_prompt = "What is the oil level indicated by your vehicle's dipstick?";
-  oil_level_prompt += "\t0: Below minimum";
-  oil_level_prompt += "\t1: Between minimum and maximum";
+  std::string oil_level_prompt = "What is the oil level indicated by your vehicle's dipstick?\n";
+  oil_level_prompt += "\t0: Below minimum\n";
+  oil_level_prompt += "\t1: Between minimum and maximum\n";
   oil_level_prompt += "\t2: Above maximum\n";
   oil_level_prompt += "[0, 1, 2]: ";
 
@@ -70,25 +76,26 @@ auto get_vehicle_condition() {
   //printf("[0, 1, 2]: ");
   //std::cin >> oil_level;
 
-  std::string oil_levels[] = { "0", "1", "2" };
+  std::string valid_oil_levels[3] = { "0", "1", "2" };
 
-  // Get the oil level as an integer, and validate the input
-  const char* oil_level_str = accept_only_valid_inputs(
+  // Get the oil level, and validate the input
+  std::string oil_level_str = accept_only_valid_inputs(
         oil_level_prompt.c_str(),
-        invalid_input,
-        oil_levels
+        ERROR_INVALID_INPUT,
+        valid_oil_levels
         //{ "0", "1", "2" }
-      ).c_str();
-  int oil_level = atof(oil_level_str);
+      );
+  // Convert the oil level to an integer value
+  int oil_level = atoi(oil_level_str.c_str());
 
   // Accepts only "Yes", "yes", "No", "no" inputs
   // Only these answers may be given, any other answers are silently ignored
+  std::string valid_yes_or_no_inputs[4] = { "Yes", "yes", "No", "no" };
   auto accept_only_yes_or_no = [&] (const char* prompt) -> std::string {
-    std::string accepted_inputs[] = { "Yes", "yes", "No", "no" };
       return accept_only_valid_inputs(
         prompt,
-        invalid_input,
-        accepted_inputs
+        ERROR_INVALID_INPUT,
+        valid_yes_or_no_inputs
       );
   };
 
@@ -109,7 +116,7 @@ auto get_vehicle_condition() {
 }
 
 int main () {
-  get_user_input();
-  //get_vehicle_condition();
+  //get_user_input();
+  get_vehicle_condition();
   return 0;
 }
