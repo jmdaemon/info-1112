@@ -10,7 +10,7 @@
 #include <vector>
 
 // Generic input validation
-const char* ERROR_INVALID_INPUT = "Error: Your input was invalid.";
+const char* ERROR_INVALID_INPUT = "Error: Your input was invalid. Please try again.";
 const std::vector<std::string> valid_yes_or_no_inputs { "Yes", "yes", "No", "no" };
 
 // Prompts user for input, for any input type
@@ -45,7 +45,8 @@ T accept_only_valid_inputs(
   // If input is invalid
   while (!input_is_valid) {
     // Display the error message
-    printf("%s\n", error_prompt);
+    //printf("%s\n", error_prompt);
+    puts(error_prompt);
 
     // Force user to give valid input
     input = prompt<T>(msg);
@@ -61,20 +62,19 @@ auto get_user_input() {
   char units = accept_only_valid_inputs<char>("Select your units. M: Miles, K: Kilometers: [M/K]: ", ERROR_INVALID_INPUT, {'M', 'K', 'm', 'k'});
   units = toupper(units);
 
-  double distance = prompt<double>("Enter your trip distance: ");
+  // Reduce code duplication with specific lambda function
+  auto accept_only_positive_numbers = [](const char* msg, const char* data) -> double {
+    // Accept only positive decimal numbers, and force user to retry if negative value is entered
+    double number = prompt<double>(msg);
+    while (number < 0) {
+      printf("Error: Your input was invalid. %s cannot be negative. Please try again.\n", data);
+      number = prompt<double>(msg);
+    }
+    return number;
+  };
 
-  // TODO: Cannot compare doubles in this way, must find other way of comparison
-  if (distance < 0) {
-    printf("%s\n%s", ERROR_INVALID_INPUT, "Distance cannot be negative.");
-    exit(-1);
-  }
-
-  double speed = prompt<double>("Enter your vehicle's speed in kilometers per minute (km/m): ");
-
-  if (speed < 0) {
-    printf("%s\n%s", ERROR_INVALID_INPUT, "Speed cannot be negative.");
-    exit(-1);
-  }
+  double distance = accept_only_positive_numbers("Enter your trip distance: " , "Distance");
+  double speed = accept_only_positive_numbers("Enter your vehicle's speed in kilometers per minute (km/m): ", "Speed");
   
   puts(""); // Print empty line
   return std::make_tuple(units, distance, speed);
