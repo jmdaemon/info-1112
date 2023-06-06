@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <cstdio>
 #include <tuple>
+#include <vector>
 
 // Get valid user input
 auto get_user_input() {
@@ -61,7 +62,12 @@ void show_trip(double km, double speed, double eta) {
   printf("\tYour vehicle is traveling at %.3f km/min.\n\n", speed);
 }
 
-// Road Trip Safety Functions
+// Road Trip Safety Functionality
+struct SafetyConcern {
+  const char* concern;
+  const char* precaution;
+};
+
 std::string capitalize(std::string s) {
   s[0] = toupper(s[0]);
   return s;
@@ -74,6 +80,7 @@ auto get_vehicle_condition() {
   puts("What is the oil level indicated by your vehicle's dipstick?");
   puts("\t0: Below minimum");
   puts("\t1: Between minimum and maximum");
+  puts("\t2: Above maximum");
   printf("[0, 1, 2]: ");
 
   int oil_level;
@@ -101,22 +108,45 @@ void show_vehicle_condition(
     std::string engine_temp_light,
     std::string battery_alert_light) {
 
+  std::vector<SafetyConcern> safety_concerns;
+  //safety_concerns.push_back()
   if (oil_level == 0) {
-    puts("You should inspect for any oil leaks, and add more oil as needed");
+    SafetyConcern oil_leak { "Oil Level is Below Minimum", "You should inspect for any oil leaks, and add more oil as needed"};
+    safety_concerns.push_back(oil_leak);
+    //puts();
   } else if (oil_level == 2) {
-    puts("You should drain the excess oil at an automotive repair shop");
+    SafetyConcern oil_overflow { "Oil Level is Above Maximum", "You should drain the excess oil at an automotive repair shop"};
+    safety_concerns.push_back(oil_overflow);
   }
 
   if (capitalize(tire_pressure) == "No") {
-    puts("Check the tire pressure and inflate or deflate them as needed");
+    SafetyConcern incorrect_tire_pressure { "Tire Pressure is Not Between 30-35 psi", "Check the tire pressure and inflate or deflate them as needed"};
+    safety_concerns.push_back(incorrect_tire_pressure);
   }
 
   if (capitalize(engine_temp_light) == "Yes") {
-    puts("Call a roadside service to tow your vehicle to a repair shop");
+    SafetyConcern engine_temp_light_is_on { "Engine Temperature Warning Light is On", "Call a roadside service to tow your vehicle to a repair shop"};
+    safety_concerns.push_back(engine_temp_light_is_on);
   }
 
   if (capitalize(battery_alert_light) == "Yes") {
-    puts("You should have your electrical systems checked for faults at a repair shop. A new battery may be needed.");
+    SafetyConcern battery_alert_light_is_on { "Battery Alert Light is On", "You should have your electrical systems checked for faults at a repair shop. A new battery may be needed."};
+    safety_concerns.push_back(battery_alert_light_is_on);
+  }
+
+  if (safety_concerns.size() > 0) {
+    std::cout << std::left;
+    std::cout << std::setw(40) << "Safety Concern" << std::setw(6) << " " << std::setw(40) << "Precaution" << std::endl;
+    std::cout <<
+      std::setfill('*') << std::setw(40) << "*" <<
+      std::setfill(' ') << std::setw(6) << " " <<
+      std::setfill('*') << std::setw(40) << "*" <<
+      std::setfill(' ') << std::endl;
+  } else {
+    std::cout << "Have a safe trip! Your vehicle is free of any issues or potential safety concerns.";
+  }
+  for (auto safety_concern : safety_concerns) {
+    std::cout << std::setw(40) << safety_concern.concern << std::setw(6) << " " << std::setw(40) << safety_concern.precaution << std::endl;
   }
 }
 
