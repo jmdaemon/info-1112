@@ -8,14 +8,13 @@
 #include <cstdio>
 #include <iomanip>
 #include <iostream>
-#include <limits>
 #include <tuple>
 #include <vector>
 
 // Clear input stream, and ignore any unparseable characters
 void reset_stdin() {
   std::cin.clear();
-  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  std::cin.ignore();
 }
 
 // Generic input validation
@@ -64,7 +63,7 @@ T accept_only_valid_inputs(
     // Reset the input stream in case of infinite loop caused by providing invalid input
     reset_stdin();
   }
-  reset_stdin(); // Reset input stream manually, in case there were unparseable characters
+  std::cin.clear(); // Clear errors from stdin
   return input;
 }
 
@@ -84,7 +83,9 @@ auto get_user_input() {
       // Reset the input stream in case of infinite loop caused by providing non-numeric input
       reset_stdin();
     }
-    reset_stdin(); // Reset input stream manually, in case there were unparseable characters
+    // Reset input stream manually, in case there were unparseable characters
+    // i.e 67.5m, 67.5km would just ignore the unparseable characters
+    reset_stdin(); 
     return number;
   };
 
