@@ -61,26 +61,21 @@ auto get_user_input() {
   char units = accept_only_valid_inputs<char>("Select your units. M: Miles, K: Kilometers: [M/K]: ", ERROR_INVALID_INPUT, {'M', 'K', 'm', 'k'});
   units = toupper(units);
 
-  double distance;
-  printf("Enter your trip distance: ");
-  std::cin >> distance;
+  double distance = prompt<double>("Enter your trip distance: ");
 
   // TODO: Cannot compare doubles in this way, must find other way of comparison
   if (distance < 0) {
-    puts("Error: Your input was invalid.");
-    puts("Distance cannot be negative.");
+    printf("%s\n%s", ERROR_INVALID_INPUT, "Distance cannot be negative.");
     exit(-1);
   }
 
-  double speed;
-  printf("Enter your vehicle's speed in kilometers per minute (km/m): ");
-  std::cin >> speed;
+  double speed = prompt<double>("Enter your vehicle's speed in kilometers per minute (km/m): ");
 
   if (speed < 0) {
-    puts("Error: Your input was invalid.");
-    puts("Speed cannot be negative.");
-    exit(-2);
+    printf("%s\n%s", ERROR_INVALID_INPUT, "Speed cannot be negative.");
+    exit(-1);
   }
+  
   puts(""); // Print empty line
   return std::make_tuple(units, distance, speed);
 }
