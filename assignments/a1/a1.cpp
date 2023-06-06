@@ -12,7 +12,6 @@
 
 // Generic input validation
 const char* ERROR_INVALID_INPUT = "Error: Your input was invalid. Please try again.";
-const std::vector<std::string> valid_yes_or_no_inputs { "Yes", "yes", "No", "no" };
 
 // Prompts user for input, for any input type
 template <typename T>
@@ -134,7 +133,7 @@ auto get_vehicle_condition() {
 
   // Lambda function that accepts only yes or no inputs, and reduces code duplication
   auto accept_only_yes_or_no = [&] (const char* prompt) -> std::string
-    { return accept_only_valid_inputs<std::string>(prompt, ERROR_INVALID_INPUT, valid_yes_or_no_inputs); };
+    { return accept_only_valid_inputs<std::string>(prompt, ERROR_INVALID_INPUT, { "Yes", "yes", "No", "no" }); };
 
   std::string tire_pressure = accept_only_yes_or_no("Are your front and rear tire pressures between 30 and 35 psi? Answer [Yes/No]: ");
   std::string engine_temp_light = accept_only_yes_or_no("Is your engine temperature warning light on? Answer [Yes/No]: ");
