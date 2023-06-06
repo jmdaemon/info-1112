@@ -63,6 +63,8 @@ void show_trip(double km, double speed, double eta) {
 }
 
 // Road Trip Safety Functionality
+const unsigned short SAFETY_CONCERN_TABLE_WIDTH = 40; 
+
 struct SafetyConcern {
   const char* concern;
   const char* precaution;
@@ -134,19 +136,34 @@ void show_vehicle_condition(
     safety_concerns.push_back(battery_alert_light_is_on);
   }
 
+  // Useful lambda functions for printing formatted table
+  auto print_stars = []() { std::cout << std::setfill('*') << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << "*" << std::setfill(' '); };
+  auto print_gaps = [] () { std::cout << std::setw(6) << " "; };
+  auto print_col = [](const char* text) { std::cout << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << text; };
+
   if (safety_concerns.size() > 0) {
     std::cout << std::left;
-    std::cout << std::setw(40) << "Safety Concern" << std::setw(6) << " " << std::setw(40) << "Precaution" << std::endl;
-    std::cout <<
-      std::setfill('*') << std::setw(40) << "*" <<
-      std::setfill(' ') << std::setw(6) << " " <<
-      std::setfill('*') << std::setw(40) << "*" <<
-      std::setfill(' ') << std::endl;
+
+    print_col("Safety Concern"); print_gaps(); print_col("Precaution"); puts("");
+
+    //std::cout <<
+      //std::left <<
+      //std::setw(SAFETY_CONCERN_TABLE_WIDTH) << "Safety Concern" <<
+      //std::setw(6) << " " <<
+      //std::setw(SAFETY_CONCERN_TABLE_WIDTH) << "Precaution" << std::endl;
+
+    print_stars(); print_gaps(); print_stars(); puts("");
+    //std::cout <<
+      //std::setfill('*') << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << "*" <<
+      //std::setfill(' ') << std::setw(6) << " " <<
+      //std::setfill('*') << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << "*" <<
+      //std::setfill(' ') << std::endl;
   } else {
     std::cout << "Have a safe trip! Your vehicle is free of any issues or potential safety concerns.";
   }
   for (auto safety_concern : safety_concerns) {
-    std::cout << std::setw(40) << safety_concern.concern << std::setw(6) << " " << std::setw(40) << safety_concern.precaution << std::endl;
+    //std::cout << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << safety_concern.concern << std::setw(6) << " " << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << safety_concern.precaution << std::endl;
+    print_col(safety_concern.concern); print_gaps(); print_col(safety_concern.precaution); puts("");
   }
 }
 
