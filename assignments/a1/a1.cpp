@@ -3,13 +3,14 @@
   * Student Number  : 100427500
   * Course Name     : INFO 1112 S10
   **/
-#include <cstdio>
+
 #include <cmath>
+#include <cstdio>
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <tuple>
 #include <vector>
-#include <limits>
 
 // Clears stdin, and ignores any unparseable characters
 void reset_stdin() {
