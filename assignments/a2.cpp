@@ -46,6 +46,7 @@ double mi_to_km(double miles) {
   return miles * 1.6;
 }
 
+// Converts miles to kilometers if they units are in miles, else returns the distance parameter
 double to_km(char units, double distance) {
   return (units == 'M') ? mi_to_km(distance) : distance;
 }
@@ -136,18 +137,21 @@ std::vector<SafetyConcern> check_vehicle_safety(
   return safety_concerns;
 }
 
+// Displays the vehicle safety condition in a formatted table
 void show_vehicle_condition(std::vector<SafetyConcern> safety_concerns) {
   // Useful lambda functions for printing formatted table
   auto print_stars = []() { std::cout << std::setfill('*') << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << "*" << std::setfill(' '); };
   auto print_gaps = [] () { std::cout << std::setw(6) << " "; };
   auto print_col = [](const char* text) { std::cout << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << text; };
 
+  // If there are any safety concerns
   if (safety_concerns.size() > 0) {
     std::cout << std::left; // Left justify all column text
     // Print safety concern header
     print_col("Safety Concern");  print_gaps(); print_col("Precaution");  puts("");
     print_stars();                print_gaps(); print_stars();            puts("");
   } else {
+    // Wish the user the best on their road trip
     std::cout << "Have a safe trip! Your vehicle is free of any issues or potential safety concerns.";
   }
 
