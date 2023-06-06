@@ -12,7 +12,7 @@
 #include <tuple>
 #include <vector>
 
-// Clears stdin, and ignores any unparseable characters
+// Clear input stream, and ignore any unparseable characters
 void reset_stdin() {
   std::cin.clear();
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -74,8 +74,8 @@ auto get_user_input() {
   units = toupper(units);
 
   // Reduce code duplication with specific lambda function
+  // Accept only positive decimal numbers, and force user to retry if negative value is entered
   auto accept_only_positive_numbers = [](const char* msg, const char* data) -> double {
-    // Accept only positive decimal numbers, and force user to retry if negative value is entered
     double number = prompt<double>(msg);
     while (number <= 0) {
       printf("Error: Your input was invalid. %s cannot be negative or zero, and must be a number. Please try again.\n", data);
