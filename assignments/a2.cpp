@@ -4,6 +4,7 @@
   * Course Name     : INFO 1112 S10
   **/
 #include <cstdio>
+#include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <tuple>
@@ -66,14 +67,19 @@ auto get_user_input() {
   auto accept_only_positive_numbers = [](const char* msg, const char* data) -> double {
     // Accept only positive decimal numbers, and force user to retry if negative value is entered
     double number = prompt<double>(msg);
-    while (number < 0) {
-      printf("Error: Your input was invalid. %s cannot be negative. Please try again.\n", data);
+    //while ((int) number <= 0) {
+    //while(fabs(number) <= 10e-1) {
+    while(number <= 0e-1) {
+      printf("Error: Your input was invalid. %s cannot be negative or zero, and must be a number. Please try again.\n", data);
       number = prompt<double>(msg);
+      // Reset the input stream in case of infinite loop
+      std::cin.clear();
+      std::cin.ignore(100, '\n');
     }
     return number;
   };
 
-  double distance = accept_only_positive_numbers("Enter your trip distance: " , "Distance");
+  double distance = accept_only_positive_numbers("Enter your trip distance: ", "Distance");
   double speed = accept_only_positive_numbers("Enter your vehicle's speed in kilometers per minute (km/m): ", "Speed");
   
   puts(""); // Print empty line
