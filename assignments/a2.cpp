@@ -104,7 +104,7 @@ auto get_vehicle_condition() {
   return std::make_tuple(oil_level, tire_pressure, engine_temp_light, battery_alert_light);
 }
 
-void show_vehicle_condition(
+std::vector<SafetyConcern> check_vehicle_safety(
     int oil_level,
     std::string tire_pressure,
     std::string engine_temp_light,
@@ -133,6 +133,10 @@ void show_vehicle_condition(
   if (capitalize(battery_alert_light) == "Yes")
     safety_concerns.push_back(battery_alert_light_is_on);
 
+  return safety_concerns;
+}
+
+void show_vehicle_condition(std::vector<SafetyConcern> safety_concerns) {
   // Useful lambda functions for printing formatted table
   auto print_stars = []() { std::cout << std::setfill('*') << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << "*" << std::setfill(' '); };
   auto print_gaps = [] () { std::cout << std::setw(6) << " "; };
@@ -169,7 +173,10 @@ int main() {
   
   show_trip(km, speed, eta);
 
+  // Check vehicle safety
+  auto safety_concerns = check_vehicle_safety(oil_level, tire_pressure, engine_temp_light, battery_alert_light);
+
   // Show current vehicle safety condition
-  show_vehicle_condition(oil_level, tire_pressure, engine_temp_light, battery_alert_light);
+  show_vehicle_condition(safety_concerns);
   return 0;
 }
