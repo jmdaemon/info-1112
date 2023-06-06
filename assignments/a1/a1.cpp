@@ -46,7 +46,6 @@ T accept_only_valid_inputs(
   // If input is invalid
   while (!input_is_valid) {
     // Display the error message
-    //printf("%s\n", error_prompt);
     puts(error_prompt);
 
     // Force user to give valid input
@@ -67,12 +66,10 @@ auto get_user_input() {
   auto accept_only_positive_numbers = [](const char* msg, const char* data) -> double {
     // Accept only positive decimal numbers, and force user to retry if negative value is entered
     double number = prompt<double>(msg);
-    //while ((int) number <= 0) {
-    //while(fabs(number) <= 10e-1) {
-    while(number <= 0e-1) {
+    while (number <= 0) {
       printf("Error: Your input was invalid. %s cannot be negative or zero, and must be a number. Please try again.\n", data);
       number = prompt<double>(msg);
-      // Reset the input stream in case of infinite loop
+      // Reset the input stream in case of infinite loop caused by providing non-numeric input
       std::cin.clear();
       std::cin.ignore(100, '\n');
     }
@@ -117,6 +114,7 @@ struct SafetyConcern {
   const char* precaution;
 };
 
+// Capitalize any string
 std::string capitalize(std::string s) {
   s[0] = toupper(s[0]);
   return s;
