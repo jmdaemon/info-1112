@@ -111,11 +111,9 @@ void show_vehicle_condition(
     std::string battery_alert_light) {
 
   std::vector<SafetyConcern> safety_concerns;
-  //safety_concerns.push_back()
   if (oil_level == 0) {
     SafetyConcern oil_leak { "Oil Level is Below Minimum", "You should inspect for any oil leaks, and add more oil as needed"};
     safety_concerns.push_back(oil_leak);
-    //puts();
   } else if (oil_level == 2) {
     SafetyConcern oil_overflow { "Oil Level is Above Maximum", "You should drain the excess oil at an automotive repair shop"};
     safety_concerns.push_back(oil_overflow);
@@ -142,29 +140,19 @@ void show_vehicle_condition(
   auto print_col = [](const char* text) { std::cout << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << text; };
 
   if (safety_concerns.size() > 0) {
-    std::cout << std::left;
-
-    print_col("Safety Concern"); print_gaps(); print_col("Precaution"); puts("");
-
-    //std::cout <<
-      //std::left <<
-      //std::setw(SAFETY_CONCERN_TABLE_WIDTH) << "Safety Concern" <<
-      //std::setw(6) << " " <<
-      //std::setw(SAFETY_CONCERN_TABLE_WIDTH) << "Precaution" << std::endl;
-
-    print_stars(); print_gaps(); print_stars(); puts("");
-    //std::cout <<
-      //std::setfill('*') << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << "*" <<
-      //std::setfill(' ') << std::setw(6) << " " <<
-      //std::setfill('*') << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << "*" <<
-      //std::setfill(' ') << std::endl;
+    std::cout << std::left; // Left justify all column text
+    // Print safety concern header
+    print_col("Safety Concern");  print_gaps(); print_col("Precaution");  puts("");
+    print_stars();                print_gaps(); print_stars();            puts("");
   } else {
     std::cout << "Have a safe trip! Your vehicle is free of any issues or potential safety concerns.";
   }
+
+  // Print safety concerns in formatted table
   for (auto safety_concern : safety_concerns) {
-    //std::cout << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << safety_concern.concern << std::setw(6) << " " << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << safety_concern.precaution << std::endl;
     print_col(safety_concern.concern); print_gaps(); print_col(safety_concern.precaution); puts("");
   }
+  std::cout << std::right; // Reset justification
 }
 
 int main() {
