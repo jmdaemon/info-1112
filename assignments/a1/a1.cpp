@@ -9,6 +9,13 @@
 #include <iostream>
 #include <tuple>
 #include <vector>
+#include <limits>
+
+// Clears stdin, and ignores any unparseable characters
+void reset_stdin() {
+  std::cin.clear();
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
 
 // Generic input validation
 const char* ERROR_INVALID_INPUT = "Error: Your input was invalid. Please try again.";
@@ -52,7 +59,11 @@ T accept_only_valid_inputs(
 
     // Check if the new input is valid
     input_is_valid = is_valid<T>(valid_inputs, input);
+
+    // Reset the input stream in case of infinite loop caused by providing invalid input
+    reset_stdin();
   }
+  reset_stdin(); // Reset input stream manually, in case there were unparseable characters
   return input;
 }
 
@@ -68,10 +79,11 @@ auto get_user_input() {
     while (number <= 0) {
       printf("Error: Your input was invalid. %s cannot be negative or zero, and must be a number. Please try again.\n", data);
       number = prompt<double>(msg);
+
       // Reset the input stream in case of infinite loop caused by providing non-numeric input
-      std::cin.clear();
-      std::cin.ignore(100, '\n');
+      reset_stdin();
     }
+    reset_stdin(); // Reset input stream manually, in case there were unparseable characters
     return number;
   };
 
