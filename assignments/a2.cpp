@@ -1,12 +1,14 @@
 /**
-  Joseph Diza
-  100427500
-*/
-#include <iostream>
-#include <iomanip>
+  * Student Name    : Joseph Diza
+  * Student Number  : 100427500
+  * Course Name     : INFO 1112 S10
+  **/
 #include <cstdio>
+#include <iomanip>
+#include <iostream>
 #include <tuple>
 #include <vector>
+// TODO: Find a way to prompt and validate inputs without code duplication
 
 // Get valid user input
 auto get_user_input() {
