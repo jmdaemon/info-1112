@@ -111,28 +111,27 @@ void show_vehicle_condition(
     std::string battery_alert_light) {
 
   std::vector<SafetyConcern> safety_concerns;
-  if (oil_level == 0) {
-    SafetyConcern oil_leak { "Oil Level is Below Minimum", "You should inspect for any oil leaks, and add more oil as needed"};
+  // List of all possible safety concerns:
+  SafetyConcern oil_leak { "Oil Level is Below Minimum", "You should inspect for any oil leaks, and add more oil as needed"};
+  SafetyConcern oil_overflow { "Oil Level is Above Maximum", "You should drain the excess oil at an automotive repair shop"};
+  SafetyConcern incorrect_tire_pressure { "Tire Pressure is Not Between 30-35 psi", "Check the tire pressure and inflate or deflate them as needed"};
+  SafetyConcern engine_temp_light_is_on { "Engine Temperature Warning Light is On", "Call a roadside service to tow your vehicle to a repair shop"};
+  SafetyConcern battery_alert_light_is_on { "Battery Alert Light is On", "You should have your electrical systems checked for faults at a repair shop. A new battery may be needed."};
+
+  // SafetyConcern check
+  if (oil_level == 0) 
     safety_concerns.push_back(oil_leak);
-  } else if (oil_level == 2) {
-    SafetyConcern oil_overflow { "Oil Level is Above Maximum", "You should drain the excess oil at an automotive repair shop"};
+  else if (oil_level == 2)
     safety_concerns.push_back(oil_overflow);
-  }
 
-  if (capitalize(tire_pressure) == "No") {
-    SafetyConcern incorrect_tire_pressure { "Tire Pressure is Not Between 30-35 psi", "Check the tire pressure and inflate or deflate them as needed"};
+  if (capitalize(tire_pressure) == "No")
     safety_concerns.push_back(incorrect_tire_pressure);
-  }
 
-  if (capitalize(engine_temp_light) == "Yes") {
-    SafetyConcern engine_temp_light_is_on { "Engine Temperature Warning Light is On", "Call a roadside service to tow your vehicle to a repair shop"};
+  if (capitalize(engine_temp_light) == "Yes")
     safety_concerns.push_back(engine_temp_light_is_on);
-  }
 
-  if (capitalize(battery_alert_light) == "Yes") {
-    SafetyConcern battery_alert_light_is_on { "Battery Alert Light is On", "You should have your electrical systems checked for faults at a repair shop. A new battery may be needed."};
+  if (capitalize(battery_alert_light) == "Yes")
     safety_concerns.push_back(battery_alert_light_is_on);
-  }
 
   // Useful lambda functions for printing formatted table
   auto print_stars = []() { std::cout << std::setfill('*') << std::setw(SAFETY_CONCERN_TABLE_WIDTH) << "*" << std::setfill(' '); };
