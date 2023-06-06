@@ -8,14 +8,57 @@
 #include <iostream>
 #include <tuple>
 #include <vector>
-// TODO: Find a way to prompt and validate inputs without code duplication
+
+// Generic input validation
+const char* ERROR_INVALID_INPUT = "Error: Your input was invalid.";
+const std::vector<std::string> valid_yes_or_no_inputs { "Yes", "yes", "No", "no" };
+
+// Prompts user for input, for any input type
+template <typename T>
+T prompt(const char* msg) {
+  T input;
+  printf("%s", msg);
+  std::cin >> input;
+  return input;
+}
+
+// Returns true if the input was valid, and false otherwise, for any input type
+template <typename T>
+bool is_valid(std::vector<T> valid_inputs, T input) {
+  for (auto valid_input : valid_inputs)
+    if (input == valid_input)
+      return true;
+  return false;
+}
+
+// Accepts only valid inputs types, for any input data type
+template <typename T>
+T accept_only_valid_inputs(
+    const char* msg,
+    const char* error_prompt,
+    std::vector<T> valid_inputs) {
+  // Get user input
+  T input = prompt<T>(msg);
+
+  bool input_is_valid = is_valid<T>(valid_inputs, input);
+
+  // If input is invalid
+  while (!input_is_valid) {
+    // Display the error message
+    printf("%s\n", error_prompt);
+
+    // Force user to give valid input
+    input = prompt<T>(msg);
+
+    // Check if the new input is valid
+    input_is_valid = is_valid<T>(valid_inputs, input);
+  }
+  return input;
+}
 
 // Get valid user input
 auto get_user_input() {
-  char units;
-  printf("Select your units. M: Miles, K: Kilometers: [M/K]: ");
-  std::cin >> units;
-
+  char units = accept_only_valid_inputs<char>("Select your units. M: Miles, K: Kilometers: [M/K]: ", ERROR_INVALID_INPUT, {'M', 'K', 'm', 'k'});
   units = toupper(units);
 
   double distance;
@@ -82,26 +125,21 @@ std::string capitalize(std::string s) {
 auto get_vehicle_condition() {
   puts("Allow us to check the safety of your vehicle. Please answer the following questions.");
 
-  puts("What is the oil level indicated by your vehicle's dipstick?");
-  puts("\t0: Below minimum");
-  puts("\t1: Between minimum and maximum");
-  puts("\t2: Above maximum");
-  printf("[0, 1, 2]: ");
+  std::string oil_level_prompt = "What is the oil level indicated by your vehicle's dipstick?\n"
+    "\t0: Below minimum\n"
+    "\t1: Between minimum and maximum\n"
+    "\t2: Above maximum\n"
+    "[0, 1, 2]: ";
 
-  int oil_level;
-  std::cin >> oil_level;
+  int oil_level = accept_only_valid_inputs<int>(oil_level_prompt.c_str(), ERROR_INVALID_INPUT, { 0, 1, 2 });
 
-  std::string tire_pressure;
-  printf("Are your front and rear tire pressures between 30 and 35 psi? Answer [Yes/No]: ");
-  std::cin >> tire_pressure;
+  // Lambda function that accepts only yes or no inputs, and reduces code duplication
+  auto accept_only_yes_or_no = [&] (const char* prompt) -> std::string
+    { return accept_only_valid_inputs<std::string>(prompt, ERROR_INVALID_INPUT, valid_yes_or_no_inputs); };
 
-  std::string engine_temp_light;
-  printf("Is your engine temperature warning light on? Answer [Yes/No]: ");
-  std::cin >> engine_temp_light;
-
-  std::string battery_alert_light;
-  printf("Is the battery alert light on? Answer [Yes/No]: ");
-  std::cin >> battery_alert_light;
+  std::string tire_pressure = accept_only_yes_or_no("Are your front and rear tire pressures between 30 and 35 psi? Answer [Yes/No]: ");
+  std::string engine_temp_light = accept_only_yes_or_no("Is your engine temperature warning light on? Answer [Yes/No]: ");
+  std::string battery_alert_light = accept_only_yes_or_no("Is the battery alert light on? Answer [Yes/No]:");
   puts(""); // Print empty line
 
   return std::make_tuple(oil_level, tire_pressure, engine_temp_light, battery_alert_light);
@@ -165,18 +203,19 @@ void show_vehicle_condition(std::vector<SafetyConcern> safety_concerns) {
 }
 
 int main() {
+  // Get trip information
   auto [units, distance, speed] = get_user_input();
 
   // Get vehicle condition
   auto [oil_level, tire_pressure, engine_temp_light, battery_alert_light] = get_vehicle_condition();
   
-  // Show road trip information
   // Convert distance to kilometers if miles are given
   double km = to_km(units, distance);
 
   // Calculate the estimated time of arrival for the trip
   double eta = calc_time(km, speed);
   
+  // Show road trip information
   show_trip(km, speed, eta);
 
   // Check vehicle safety
