@@ -10,6 +10,7 @@
 #include <iostream>
 #include <tuple>
 #include <vector>
+#include <limits>
 
 // Clear input stream, and ignore any unparseable characters
 void reset_stdin() {
@@ -51,6 +52,9 @@ T accept_only_valid_inputs(
 
   // If input is invalid
   while (!input_is_valid) {
+    // Reset the input stream in case of infinite loop caused by providing invalid input
+    reset_stdin();
+
     // Display the error message
     puts(error_prompt);
 
@@ -59,9 +63,6 @@ T accept_only_valid_inputs(
 
     // Check if the new input is valid
     input_is_valid = is_valid<T>(valid_inputs, input);
-
-    // Reset the input stream in case of infinite loop caused by providing invalid input
-    reset_stdin();
   }
   std::cin.clear(); // Clear errors from stdin
   return input;
@@ -77,15 +78,16 @@ auto get_user_input() {
   auto accept_only_positive_numbers = [](const char* msg, const char* data) -> double {
     double number = prompt<double>(msg);
     while (number <= 0) {
-      printf("Error: Your input was invalid. %s cannot be negative or zero, and must be a number. Please try again.\n", data);
-      number = prompt<double>(msg);
-
       // Reset the input stream in case of infinite loop caused by providing non-numeric input
       reset_stdin();
+
+      printf("Error: Your input was invalid. %s cannot be negative or zero, and must be a number. Please try again.\n", data);
+      number = prompt<double>(msg);
     }
     // Reset input stream manually, in case there were unparseable characters
-    // i.e 67.5m, 67.5km would just ignore the unparseable characters
-    reset_stdin(); 
+    // i.e 67.5m, 67.5km would ignore unparseable characters 'm' and 'km'
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return number;
   };
 
