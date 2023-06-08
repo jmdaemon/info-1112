@@ -30,9 +30,8 @@ bool in_range(int min, int max, int value) {
 }
 
 /** Get the performance level of an employee
-  * `performance` must a valid integer within the range 0-10 **/
+  * Assume `performance` must a valid integer within the range 0-10 **/
 PERFORMANCE_LEVEL get_perf_level(unsigned short performance) {
-  // Using conditional operator
   PERFORMANCE_LEVEL perf_level
     = in_range(8, 10, performance) ? EXCELLENT
     : in_range(7, 8, performance) ? GOOD
@@ -43,11 +42,11 @@ PERFORMANCE_LEVEL get_perf_level(unsigned short performance) {
 
 auto get_user_input() {
   double salary;
-  printf("What is your salary?: ");
+  printf("What is your salary in dollars?: $");
   std::cin >> salary;
 
   Performance performance;
-  printf("What was the customer's feedback?: ");
+  printf("What was the customer's feedback? [0-10]: ");
   std::cin >> performance;
 
   // If the performance is invalid, we will exit early, this will be when performance < 0 or performance > 10
@@ -91,6 +90,7 @@ void show_employee_salary(double salary, PERFORMANCE_LEVEL perf_level) {
 }
 
 int main() {
+  // Get employee salary and performance level
   auto [salary, perf_level] = get_user_input();
 
   show_employee_salary(salary, perf_level);
