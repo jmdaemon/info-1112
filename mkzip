@@ -4,7 +4,7 @@
 # Filters out unnecessary build artifacts and creates valid zip submission files
 
 # Include only these files
-include=(*.c *.cpp *.md *.sh Makefile)
+include=(*.c *.cpp *.md *.sh Makefile *.sln *.vcxproj *.vcxproj.filters *.vcxproj.user)
 
 OUTPUT_TEMPDIR="tmp"
 
