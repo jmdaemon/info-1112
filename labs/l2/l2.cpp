@@ -17,7 +17,7 @@ enum PERFORMANCE_LEVEL {
   EXCELLENT,
 };
 
-const double PERFORMANCE_LEVEL_PERCENTAGES[4] = {
+const double PERFORMANCE_LEVEL_PAY_CHANGES[4] = {
   -10.0 / 100 , // WEAK
   5.0 / 100   , // ACCEPTED
   10.0 / 100  , // GOOD
@@ -53,7 +53,7 @@ const char* get_perf_desc(PERFORMANCE_LEVEL perf_level) {
 }
 
 double get_perf_scale(PERFORMANCE_LEVEL perf_level) {
-  return PERFORMANCE_LEVEL_PERCENTAGES[perf_level];
+  return PERFORMANCE_LEVEL_PAY_CHANGES[perf_level];
 }
 
 auto get_user_input() {
