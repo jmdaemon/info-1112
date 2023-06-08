@@ -64,7 +64,6 @@ T accept_only_valid_inputs(
     // Check if the new input is valid
     input_is_valid = is_valid<T>(valid_inputs, input);
   }
-  std::cin.clear(); // Clear errors from stdin
   return input;
 }
 
