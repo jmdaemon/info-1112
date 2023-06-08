@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <tuple>
 
+// Employee Performance Level Functionality
 enum PERFORMANCE_LEVEL {
   WEAK,
   ACCEPTED,
@@ -40,6 +41,21 @@ PERFORMANCE_LEVEL get_perf_level(unsigned short performance) {
   return perf_level;
 }
 
+const char* get_perf_desc(PERFORMANCE_LEVEL perf_level) {
+  const char* perf_desc;
+  switch(perf_level) {
+    case EXCELLENT: perf_desc = "excellent"; break;
+    case GOOD     : perf_desc = "good"; break;
+    case ACCEPTED : perf_desc = "acceptable"; break;
+    case WEAK     : perf_desc = "weak"; break;
+  }
+  return perf_desc;
+}
+
+double get_perf_scale(PERFORMANCE_LEVEL perf_level) {
+  return PERFORMANCE_LEVEL_PERCENTAGES[perf_level];
+}
+
 auto get_user_input() {
   double salary;
   printf("What is your salary in dollars?: $");
@@ -59,21 +75,7 @@ auto get_user_input() {
   return std::make_tuple(salary, perf_level);
 }
 
-const char* get_perf_desc(PERFORMANCE_LEVEL perf_level) {
-  const char* perf_desc;
-  switch(perf_level) {
-    case EXCELLENT: perf_desc = "excellent"; break;
-    case GOOD     : perf_desc = "good"; break;
-    case ACCEPTED : perf_desc = "acceptable"; break;
-    case WEAK     : perf_desc = "weak"; break;
-  }
-  return perf_desc;
-}
-
-double get_perf_scale(PERFORMANCE_LEVEL perf_level) {
-  return PERFORMANCE_LEVEL_PERCENTAGES[perf_level];
-}
-
+// Employee Salary Functionality
 double calc_change_in_pay(double salary, PERFORMANCE_LEVEL perf_level) {
   return salary * get_perf_scale(perf_level);
 }
