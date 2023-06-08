@@ -26,7 +26,7 @@ const double PERFORMANCE_LEVEL_PAY_CHANGES[4] = {
 
 typedef unsigned short Performance;
 
-// Inclusive
+// Determines if a value falls within a given range (inclusive).
 bool in_range(int min, int max, int value) {
   return (value >= min && value <= max);
 }
@@ -34,23 +34,11 @@ bool in_range(int min, int max, int value) {
 /** Get the performance level of an employee
   * Assume `performance` must a valid integer within the range 0-10 **/
 PERFORMANCE_LEVEL get_perf_level(unsigned short performance) {
-  //PERFORMANCE_LEVEL perf_level
-    //= in_range(8, 10, performance) ? EXCELLENT
-    //: in_range(7, 8, performance) ? GOOD
-    //: in_range(5, 7, performance) ? ACCEPTED
-    //: WEAK;
-  //return perf_level;
-
-  // Using if-else:
-  PERFORMANCE_LEVEL perf_level;
-  if (in_range(0, 5, performance))
-    perf_level = WEAK;
-  else if (in_range(5, 7, performance))
-    perf_level = ACCEPTED;
-  else if (in_range(7, 8, performance))
-    perf_level = GOOD;
-  else if (in_range(8, 10, performance))
-    perf_level = EXCELLENT;
+  PERFORMANCE_LEVEL perf_level
+    = in_range(9, 10, performance) ? EXCELLENT
+    : in_range(8, 8, performance) ? GOOD
+    : in_range(6, 7, performance) ? ACCEPTED
+    : WEAK;
   return perf_level;
 }
 
