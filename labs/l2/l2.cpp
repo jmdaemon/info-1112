@@ -32,19 +32,6 @@ bool in_range(int min, int max, int value) {
 /** Get the performance level of an employee
   * `performance` must a valid integer within the range 0-10 **/
 PERFORMANCE_LEVEL get_perf_level(unsigned short performance) {
-  // Using if-else:
-  //PERFORMANCE_LEVEL perf_level;
-  //if (in_range(0, 5, performance))
-    //perf_level = WEAK;
-  //else if (in_range(5, 7, performance))
-    //perf_level = ACCEPTED;
-  //else if (in_range(7, 8, performance))
-    //perf_level = GOOD;
-  //else if (in_range(8, 10, performance))
-    //perf_level = EXCELLENT;
-  
-  //return perf_level;
-
   // Using conditional operator
   PERFORMANCE_LEVEL perf_level
     = in_range(8, 10, performance) ? EXCELLENT
@@ -60,19 +47,16 @@ auto get_user_input() {
   std::cin >> salary;
 
   Performance performance;
-  //int performance;
-  //printf("On a scale of 0-10, how would you say your performance was this term?: ");
   printf("What was the customer's feedback?: ");
   std::cin >> performance;
 
-  // If the performance is invalid, we will exit early
-  //if (performance < 0 || performance > 10) {
+  // If the performance is invalid, we will exit early, this will be when performance < 0 or performance > 10
   if (performance > 10) {
     puts("Invalid performance level. Performance level should be in the range 0-10.");
     exit(-1);
   }
+
   PERFORMANCE_LEVEL perf_level = get_perf_level(performance);
-  //return std::make_tuple(salary, performance);
   return std::make_tuple(salary, perf_level);
 }
 
@@ -88,14 +72,6 @@ const char* get_perf_desc(PERFORMANCE_LEVEL perf_level) {
 }
 
 double get_perf_scale(PERFORMANCE_LEVEL perf_level) {
-  //double scale;
-  //switch (perf_level) {
-    //case EXCELLENT: scale = 0.25; break;
-    //case GOOD     : scale = 0.25; break;
-    //case ACCEPTED : scale = 0.25; break;
-    //case WEAK     : scale = 0.25; break;
-  //}
-  //return scale;
   return PERFORMANCE_LEVEL_PERCENTAGES[perf_level];
 }
 
