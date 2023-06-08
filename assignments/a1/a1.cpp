@@ -15,7 +15,7 @@
 // Clear input stream, and ignore any unparseable characters
 void reset_stdin() {
   std::cin.clear();
-  std::cin.ignore();
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
 // Generic input validation
@@ -83,10 +83,9 @@ auto get_user_input() {
       printf("Error: Your input was invalid. %s cannot be negative or zero, and must be a number. Please try again.\n", data);
       number = prompt<double>(msg);
     }
-    // Reset input stream manually, in case there were unparseable characters
+    // Reset input stream in case there were unparseable characters
     // i.e 67.5m, 67.5km would ignore unparseable characters 'm' and 'km'
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    reset_stdin();
     return number;
   };
 
