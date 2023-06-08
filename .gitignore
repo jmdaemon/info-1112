@@ -3,6 +3,8 @@ tmp
 bin
 course.sh
 *.out
+x86
+x64
 
 # Ignore archived oggex binaries
 _packages
