@@ -8,8 +8,8 @@ CFLAGS=$(DEBUG_FLAGS)
 q1: bin
 	$(CC) $(CFLAGS) q1.cpp -o bin/q1
 
-#q2: bin
-	#$(CC) $(CFLAGS) q2.cpp -o bin/q2
+q2: bin
+	$(CC) $(CFLAGS) q2.cpp -o bin/q2
 
 #q3: bin
 	#$(CC) $(CFLAGS) q3.cpp -o bin/q3
