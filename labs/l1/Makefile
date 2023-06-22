@@ -5,10 +5,10 @@ DBG_FLAGS=-g -O0 -DDEBUG
 # Set current compiler flags
 CFLAGS=$(DEBUG_FLAGS)
 
-lab1: bin
-	$(CC) $(CFLAGS) lab1.cpp -o bin/lab1
+l1: bin
+	$(CC) $(CFLAGS) l1.cpp -o bin/l1
 
-all: lab01
+all: l1
 
 bin:
 	mkdir bin
