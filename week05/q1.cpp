@@ -30,8 +30,8 @@ void show_employee_ages(int employee_ages[4]) {
   
   std::cout << "Number of Employees in each Age Group" << std::endl;
   print_row("Under 30", employee_ages[0]);
-  print_row("30-40", employee_ages[1]);
-  print_row("41-50", employee_ages[2]);
+  print_row("30-39", employee_ages[1]);
+  print_row("40-49", employee_ages[2]);
   print_row("Above 50", employee_ages[3]);
 }
 
