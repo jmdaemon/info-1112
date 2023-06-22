@@ -28,7 +28,7 @@ void populate_employee_ages(int employee_ages[4]) {
 void show_employee_ages(int employee_ages[4]) {
   // Functions for printing with output
   auto print_col = [](int spaces, auto text) {
-    std::cout << std::setw(spaces) << text;
+    std::cout << std::left << std::setw(spaces) << text;
   };
   auto print_gapsize_8 = [&](auto text) { print_col(8, text); };
   auto print_gapsize_4 = [&](auto text) { print_col(4, text); };
