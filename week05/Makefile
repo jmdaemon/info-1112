@@ -11,8 +11,8 @@ q1: bin
 q2: bin
 	$(CC) $(CFLAGS) q2.cpp -o bin/q2
 
-#q3: bin
-	#$(CC) $(CFLAGS) q3.cpp -o bin/q3
+q3: bin
+	$(CC) $(CFLAGS) q3.cpp -o bin/q3
 
 #q4: bin
 	#$(CC) $(CFLAGS) q4.cpp -o bin/q4
@@ -36,7 +36,7 @@ q2: bin
 	#$(CC) $(CFLAGS) q12.cpp -o bin/q12
 
 #all: q1 q2 q3 q4 q5 q6 q7 q8 q11 q12
-all: q2
+all: q1 q2 q3
 
 bin:
 	mkdir bin
