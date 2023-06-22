@@ -4,8 +4,9 @@
 
 const int COL1_WIDTH = 10;
 const int COL2_WIDTH = 4;
+typedef int AGE_GROUPS[4];
 
-void populate_employee_ages(int employee_ages[4]) {
+void populate_employee_ages(AGE_GROUPS employee_ages) {
   int age = 0;
   while (age >= 0) {
     printf("Enter an employee age. (Note: To stop reading data, enter a negative integer): ");
@@ -20,7 +21,7 @@ void populate_employee_ages(int employee_ages[4]) {
   }
 }
 
-void show_employee_ages(int employee_ages[4]) {
+void show_employee_ages(AGE_GROUPS employee_ages) {
   // Functions for printing with output
   auto print_col = [](int spaces, auto text) {
     std::cout << std::left << std::setw(spaces) << text;
@@ -40,7 +41,7 @@ void show_employee_ages(int employee_ages[4]) {
 }
 
 int main() {
-  int employee_ages[4] = {0,0,0,0};
+  AGE_GROUPS employee_ages = {0,0,0,0};
   populate_employee_ages(employee_ages);
   show_employee_ages(employee_ages);
   return 0;
