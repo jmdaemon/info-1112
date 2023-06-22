@@ -2,6 +2,9 @@
 #include <iomanip>
 #include <cstdio>
 
+const int COL1_WIDTH = 10;
+const int COL2_WIDTH = 4;
+
 void populate_employee_ages(int employee_ages[4]) {
   int age = 0;
   while (age >= 0) {
@@ -22,10 +25,10 @@ void show_employee_ages(int employee_ages[4]) {
   auto print_col = [](int spaces, auto text) {
     std::cout << std::left << std::setw(spaces) << text;
   };
-  auto print_gapsize_10 = [&](auto text) { print_col(10, text); };
-  auto print_gapsize_4 = [&](auto text) { print_col(4, text); };
+  auto print_col1 = [&](auto text) { print_col(COL1_WIDTH, text); };
+  auto print_col2 = [&](auto text) { print_col(COL2_WIDTH, text); };
   auto print_row = [&](auto col1, auto col2) {
-    print_gapsize_10(col1); print_gapsize_4(col2); puts("");
+    print_col1(col1); print_col2(col2); puts("");
   };
   
   std::cout << "Number of Employees in each Age Group" << std::endl;
