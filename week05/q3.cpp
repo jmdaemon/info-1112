@@ -37,20 +37,9 @@ int find_number_of_odd_numbers(Integers integers) {
   return count;
 }
 
-int sum_all_odd_numbers(Integers integers) {
-  int sum = 0;
-  for (auto integer: integers) {
-    if (is_odd(integer))
-      sum += integer;
-  }
-  return sum;
-}
-
 void show(Integers integers) {
-  int n = integers.size();
-  int max = find_largest_odd_number(integers);
   int count = find_number_of_odd_numbers(integers);
-  int sum = sum_all_odd_numbers(integers);
+  int max = find_largest_odd_number(integers);
 
   printf("There are %d odd numbers\n", count);
   printf("The maximum odd number is %d\n", max);
