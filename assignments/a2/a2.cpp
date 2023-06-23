@@ -47,28 +47,21 @@ typedef struct Plant {
 } Plant;
 
 // Make const/nonconst
-Plant None          = {NONE, "", 0, 0};
+//Plant None          = {NONE, "", 0, 0};
 Plant Monstera      = {MONSTERA     , "Monstera"    , PLANT_STOCK[0], PLANT_PRICES[0]};
 Plant Philodendron  = {PHILODENDRON , "Philodendron", PLANT_STOCK[1], PLANT_PRICES[1]};
 Plant Hoya          = {HOYA         , "Hoya"        , PLANT_STOCK[2], PLANT_PRICES[2]};
 
 typedef std::vector<Plant> Cart;
 
-Plant get_plant_choice(char c) {
-  Plant result = None;
+Plant* get_plant_choice(char c) {
+  Plant* result = NULL;
   switch(c) {
-    //case('M'): return std::optional<Plant> Monstera;
-    //case('P'): return std::optional<Plant> Philodendron;
-    //case('H'): return std::optional<Plant> Hoya;
-    //default: return std::optional<Plant> {};
-    case('M'): return Monstera;
-    case('P'): return Philodendron;
-    case('H'): return Hoya;
-    //default:
-       //return None;
+    case('M'): result = &Monstera; break;
+    case('P'): result = &Philodendron; break;
+    case('H'): result = &Hoya; break;
   }
   return result;
-  //return result;
 }
 
 auto get_user_input() {
@@ -91,48 +84,58 @@ auto get_user_input() {
     std::cin >> choice;
     choice = toupper(choice);
 
-    //Plant plant = get_plant_choice(choice);
-    std::optional<Plant> plant = get_plant_choice(choice);
+    Plant* plant = get_plant_choice(choice);
     // If the plant choice is invalid, we will output an error and prompt the user again
-    if (&plant == &None) {
-      if (choice == 'A') {
-        continue;
-      } else {
+    if (plant == NULL) {
+      if (choice != 'A')
         puts("Error: Invalid plant selected");
-        break;
-      }
-    }
-    
+      continue;
+    } 
+
+    Item item = plant->item;
     int amount;
-    printf("How many %s pots would you like to buy?: ", plant.name);
+    printf("How many %s pots would you like to buy?: ", item.name);
     std::cin >> amount;
 
-    Plant purchase;
-    if (amount > plant.stock) {
+    if (amount > item.quantity) {
       puts("Sorry. There are not enough of this plant available in stock.");
-      printf("Amount Available: %d\n", plant.stock);
+      printf("Amount Available: %d\n", item.quantity);
     } else {
       // Deduct the stock
-      plant.stock -= amount;
+      item.quantity -= amount;
+
       // Queue the purchase
-      purchase.price = plant.price;
-      purchase.stock = amount;
+      Plant purchase;
+      purchase.type = plant->type;
+      purchase.item.name = item.name;
+      purchase.item.price = item.price;
+      purchase.item.quantity += amount;
+
+      // Add to cart
+      cart.push_back(purchase);
     }
-    // Add to cart
-    cart.push_back(purchase);
   }
   return cart;
 }
 
-double calc_cost(Plant plant, int amount) {
-  return (plant.price * amount);
+Cart batch_cart(Cart cart) {
+  for (auto purchase: cart) {
+    switch(purchase.type) {
+      case(MONSTERA): 
+    }
+  }
+}
+
+double calc_cost(Item item) {
+  return (item.price * item.quantity);
 }
 
 // Sum the cost of the goods
 double calc_subtotal_cost(Cart cart) {
   double cost = 0;
-  for (auto item: cart) {
-    cost += (item.price * item.stock);
+  for (auto plant: cart) {
+    Item item = plant.item;
+    cost += calc_cost(item);
   }
   return cost;
 }
@@ -155,9 +158,9 @@ void print_receipt(Cart cart) {
 
   // Print receipt
   for (auto plant: cart) {
-    int amount = plant.stock;
-    const char* name = plant.name;
-    double cost = calc_cost(plant, amount);
+    int amount = plant.item.quantity;
+    const char* name = plant.item.name;
+    double cost = calc_cost(plant.item);
     print_plant_cost(amount, name, cost);
   }
 
