@@ -78,7 +78,7 @@ ITEM_ID get_item_id(char c) {
   }
 }
 
-Item* get_plant_choice(ITEM_ID id) {
+Item* lookup_item(ITEM_ID id) {
   return Inventory[id];
 }
 
@@ -127,7 +127,7 @@ auto get_user_input() {
   while(choice != 'A') {
     choice = toupper(get_user_choice());
     ITEM_ID id = get_item_id(choice);
-    Item* plant = get_plant_choice(id);
+    Item* plant = lookup_item(id);
     ln();
     if (plant == NULL) {
       // If the plant choice is invalid
@@ -291,7 +291,7 @@ void print_receipt_table(const char* username, Cart cart) {
     int amount = item.quantity;
     const char* name = item.name;
     double cost = calc_cost(item);
-    int stock_available = get_plant_choice(id)->quantity;
+    int stock_available = lookup_item(id)->quantity;
     print_4col_row(name, amount, cost, stock_available);
   }
 
