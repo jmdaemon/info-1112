@@ -12,7 +12,7 @@
 #include <string>
 #include <map>
 
-// Part I
+// Part I: Tom's Nursery Shop
 typedef unsigned int Amount;
 typedef double Price;
 
@@ -188,8 +188,35 @@ void print_receipt(Cart cart) {
   puts("Thank you! Please come again!");
 }
 
-// Part II
-// Part III
+// Part II: Loyalty Program Feature
+#include <cmath>
+
+typedef unsigned long Points;
+
+std::string get_full_name() {
+  std::string name;
+  printf("Enter your full name: ");
+  std::getline(std::cin, name, '\n');
+  return name;
+}
+
+Points calc_loyalty_points(Cart cart) {
+  Points points = 0;
+  
+  for (auto [_, item]: cart) {
+    if (item.quantity > 1) {
+      points += round(item.price / 0.75);
+    }
+  }
+  return points;
+}
+
+void show_loyalty_points(const char* username, Cart cart) {
+  Points points = calc_loyalty_points(cart);
+  printf("You earned %ld points on this purchase, %s.\n", points, username);
+}
+
+// Part III: Print Table Receipt
 
 // Constants
 const unsigned int COL1_WIDTH = 16;
@@ -197,13 +224,6 @@ const unsigned int COL2_WIDTH = 10;
 const unsigned int COL3_WIDTH = 10;
 const unsigned int COL4_WIDTH = 8;
 const unsigned int NAME_FIELD = COL1_WIDTH * 4;
-
-std::string get_user_name() {
-  std::string name;
-  printf("Enter customer name: ");
-  std::getline(std::cin, name, '\n');
-  return name;
-}
 
 // Prints a receipt in the following format:
 // Customer       [name]
@@ -273,8 +293,14 @@ int main() {
   //Cart cart = get_user_input();
   //print_receipt(cart);
 
-  // Part III:
-  std::string name = get_user_name();
+  // Part II:
+  std::string name = get_full_name();
   Cart cart = get_user_input();
-  print_receipt_table(name.c_str(), cart);
+  print_receipt(cart);
+  show_loyalty_points(name.c_str(), cart);
+
+  // Part III:
+  //std::string name = get_full_name();
+  //Cart cart = get_user_input();
+  //print_receipt_table(name.c_str(), cart);
 }
