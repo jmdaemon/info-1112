@@ -69,7 +69,7 @@ bool strequals(const char* s1, const char* s2) {
 void ln() { puts(""); }
 
 // Plant Functions
-ITEM_ID get_plant_item_id(char c) {
+ITEM_ID get_plant_id(char c) {
   switch(c) {
     case('M'): return MONSTERA;
     case('P'): return PHILODENDRON;
@@ -78,23 +78,23 @@ ITEM_ID get_plant_item_id(char c) {
   }
 }
 
-Item* get_plant_choice(ITEM_ID item_id) {
-  return Plants[item_id];
+Item* get_plant_choice(ITEM_ID id) {
+  return Plants[id];
 }
 
-Cart add_to_cart(Cart cart, Item* plant, ITEM_ID item_id, Amount amount) {
+Cart add_to_cart(Cart cart, Item* plant, ITEM_ID id, Amount amount) {
   // Queue the purchase
   Item purchase = { plant->name, amount, plant->price };
 
   // Deduct the stock
   plant->quantity -= amount;
   
-  // If we already have one of that item item_id in our bucket
-  if (hashmap_contains(cart, item_id)) {
-    cart[item_id].quantity += amount; // Just add the amounts together
+  // If we already have one of that item id in our bucket
+  if (hashmap_contains(cart, id)) {
+    cart[id].quantity += amount; // Just add the amounts together
   } else {
     // Add to cart
-    cart[item_id] = purchase;
+    cart[id] = purchase;
   }
   return cart;
 }
@@ -126,8 +126,8 @@ auto get_user_input() {
   puts("Welcome to Tom's Nursery Shop");
   while(choice != 'A') {
     choice = toupper(get_user_choice());
-    ITEM_ID item_id = get_plant_item_id(choice);
-    Item* plant = get_plant_choice(item_id);
+    ITEM_ID id = get_plant_id(choice);
+    Item* plant = get_plant_choice(id);
     ln();
     if (plant == NULL) {
       // If the plant choice is invalid
@@ -150,7 +150,7 @@ auto get_user_input() {
       printf("Amount Available: %d\n", plant->quantity);
       continue; // Return to prompt
     } 
-    cart = add_to_cart(cart, plant, item_id, amount);
+    cart = add_to_cart(cart, plant, id, amount);
     ln();
   }
   return cart;
@@ -286,12 +286,12 @@ void print_receipt_table(const char* username, Cart cart) {
   print_col1("Customer"); print_col(NAME_FIELD, username); puts("");
   print_4col_row("Plant", "Quantity", "Cost ($)", "Stock Left");
 
-  for (auto [item_id, item]: cart) {
+  for (auto [id, item]: cart) {
     // TODO: Reduce code duplication with this
     int amount = item.quantity;
     const char* name = item.name;
     double cost = calc_cost(item);
-    int stock_available = get_plant_choice(item_id)->quantity;
+    int stock_available = get_plant_choice(id)->quantity;
     print_4col_row(name, amount, cost, stock_available);
   }
 
