@@ -1,9 +1,9 @@
-#include <optional>
 #include <iostream>
 #include <iomanip>
 #include <tuple>
 #include <cstdio>
 #include <vector>
+#include <map>
 
 // Part I
 typedef unsigned int Amount;
@@ -52,7 +52,7 @@ Plant Monstera      = {MONSTERA     , "Monstera"    , PLANT_STOCK[0], PLANT_PRIC
 Plant Philodendron  = {PHILODENDRON , "Philodendron", PLANT_STOCK[1], PLANT_PRICES[1]};
 Plant Hoya          = {HOYA         , "Hoya"        , PLANT_STOCK[2], PLANT_PRICES[2]};
 
-typedef std::vector<Plant> Cart;
+typedef std::map<PLANT_TYPE, Item> Cart;
 
 Plant* get_plant_choice(char c) {
   Plant* result = NULL;
@@ -62,6 +62,11 @@ Plant* get_plant_choice(char c) {
     case('H'): result = &Hoya; break;
   }
   return result;
+}
+
+template <typename K, typename V>
+bool found_in_hashmap(std::map<K, V> hashmap, K key) {
+  return (hashmap.find(key) != hashmap.end());
 }
 
 auto get_user_input() {
@@ -87,10 +92,12 @@ auto get_user_input() {
     Plant* plant = get_plant_choice(choice);
     // If the plant choice is invalid, we will output an error and prompt the user again
     if (plant == NULL) {
-      if (choice != 'A')
+      if (choice != 'A') {
+        puts("");
         puts("Error: Invalid plant selected");
+      }
       continue; // Return to prompt
-    } 
+    }
 
     Item item = plant->item;
     Amount amount;
@@ -98,23 +105,28 @@ auto get_user_input() {
     std::cin >> amount;
 
     if (amount > item.quantity) {
+      puts("");
       puts("Sorry. There are not enough of this plant available in stock.");
       printf("Amount Available: %d\n", item.quantity);
     } else {
       // Queue the purchase
-      // Clone the plant
-      Plant purchase = { plant-> type, Item { item.name, amount, item.price }};
-      //purchase.type = plant->type;
-      //purchase.item.name = item.name;
-      //purchase.item.price = item.price;
-      //purchase.item.quantity += amount;
+      //Plant purchase = { plant->type, Item { item.name, amount, item.price }};
+      Item purchase = { item.name, amount, item.price };
 
       // Deduct the stock
       item.quantity -= amount;
-
-      // Add to cart
-      cart.push_back(purchase);
+      
+      if (found_in_hashmap(cart, plant->type)) {
+        //cart.at(plant->type).quantity += amount;
+        cart[plant->type].quantity += amount;
+      } else {
+        // Add to cart
+        //cart.push_back(purchase);
+        //cart.insert({ plant->type, purchase });
+        cart[plant->type] = purchase;
+      }
     }
+    puts("");
   }
   return cart;
 }
@@ -135,8 +147,8 @@ double calc_cost(Item item) {
 // Sum the cost of the goods
 double calc_subtotal_cost(Cart cart) {
   double cost = 0;
-  for (auto plant: cart) {
-    Item item = plant.item;
+  for (auto [_, item]: cart) {
+    //Item item = plant.item;
     cost += calc_cost(item);
   }
   return cost;
@@ -144,25 +156,22 @@ double calc_subtotal_cost(Cart cart) {
 
 // Apply PST and GST tax
 double calc_total_cost(double cost) {
-  return cost * (GST + PST);
+  return cost += (cost * (GST + PST));
 }
 
 void print_receipt(Cart cart) {
-  //const char* amount_format = "$%.3f";
   const unsigned int PRECISION = 3;
-
-  //std::cout << std::fixed << std::setprecision(PRECISION);
-  puts("Units/Description/Cost of Items");
 
   auto print_plant_cost = [&](int amount, const char* name, double cost) {
     printf("%d %s plants cost $%.*f\n", amount, name, PRECISION, cost);
   };
 
   // Print receipt
-  for (auto plant: cart) {
-    int amount = plant.item.quantity;
-    const char* name = plant.item.name;
-    double cost = calc_cost(plant.item);
+  puts("Units/Description/Cost of Items");
+  for (auto [_, item]: cart) {
+    int amount = item.quantity;
+    const char* name = item.name;
+    double cost = calc_cost(item);
     print_plant_cost(amount, name, cost);
   }
 
