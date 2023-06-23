@@ -10,6 +10,7 @@
 #include <cstdio>
 #include <vector>
 #include <string>
+#include <cstring>
 #include <map>
 
 // Part I: Tom's Nursery Shop
@@ -61,6 +62,10 @@ Plant Philodendron  = {PHILODENDRON , "Philodendron", PLANT_STOCK[1], PLANT_PRIC
 Plant Hoya          = {HOYA         , "Hoya"        , PLANT_STOCK[2], PLANT_PRICES[2]};
 
 typedef std::map<PLANT_TYPE, Item> Cart;
+
+bool strequals(const char* s1, const char* s2) {
+  return (strcmp(s1, s2) == 0);
+}
 
 Plant* get_plant_choice(char c) {
   Plant* result = NULL;
@@ -288,19 +293,33 @@ void print_receipt_table(const char* username, Cart cart) {
   puts("Thank you! Please come again!");
 }
 
-int main() {
-  // Part I:
-  //Cart cart = get_user_input();
-  //print_receipt(cart);
+int main(int argc, char** argv) {
+  // Process command line arguments
+  if ((argc < 2) || (argc > 2)) {
+    puts("Error. Invalid number of arguments.");
+    printf("Usage: %s [normal|loyalty|pretty-receipt]\n", argv[0]);
+    puts("Please provide a mode to run the program.");
+    puts("Available modes are: ");
+    puts("\tnormal        : Part I of the assignment");
+    puts("\tloyalty       : Part II of the assignment");
+    puts("\tpretty-receipt: Part III of the assignment");
+    return -1;
+  }
 
-  // Part II:
-  std::string name = get_full_name();
-  Cart cart = get_user_input();
-  print_receipt(cart);
-  show_loyalty_points(name.c_str(), cart);
-
-  // Part III:
-  //std::string name = get_full_name();
-  //Cart cart = get_user_input();
-  //print_receipt_table(name.c_str(), cart);
+  if (strequals(argv[1], "normal")) {
+    // Part I:
+    Cart cart = get_user_input();
+    print_receipt(cart);
+  } else if (strequals(argv[1], "loyalty")) {
+    // Part II:
+    std::string name = get_full_name();
+    Cart cart = get_user_input();
+    print_receipt(cart);
+    show_loyalty_points(name.c_str(), cart);
+  } else if (strequals(argv[1], "pretty-receipt")) {
+    // Part III:
+    std::string name = get_full_name();
+    Cart cart = get_user_input();
+    print_receipt_table(name.c_str(), cart);
+  }
 }
