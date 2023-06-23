@@ -10,6 +10,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <limits>
 
 // Part I: Tom's Nursery Shop
 
@@ -57,16 +58,22 @@ typedef std::map<ITEM_ID, Item> Cart;
 
 // General Purpose Functions
 
+// Fast print newline
+void ln() { puts(""); }
+
+bool strequals(const char* s1, const char* s2) { return strcmp(s1, s2) == 0; }
+
+// Clear input stream, and ignore any unparseable characters
+void reset_stdin() {
+  std::cin.clear();
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
 // The standard library still doesn't have a map.contains() method???
 template <typename K, typename V>
 bool hashmap_contains(const std::map<K, V> hashmap, const K key) {
   return (hashmap.find(key) != hashmap.end());
 }
-
-bool strequals(const char* s1, const char* s2) { return strcmp(s1, s2) == 0; }
-
-// Print newline
-void ln() { puts(""); }
 
 // Inventory Management Functions
 ITEM_ID get_item_id(const char c) {
@@ -106,7 +113,7 @@ void display_option(const char choice, const char* option) {
   printf("\t[%c|%c] for %s\n", choice_alt, choice, option);
 };
 
-// Get user's choice
+// Get user's selected option
 char get_user_choice() {
   char choice;
   puts("Select from our plants below or checkout: ");
@@ -130,13 +137,14 @@ auto get_user_input() {
     const ITEM_ID id = get_item_id(choice);
     const Item* item = lookup_item(id);
     ln();
+
     if (item == NULL) {
       // If the plant choice is invalid
       if (choice != 'A') {
-        // TODO: Find way to clear input in case of null characters
-        std::cin.ignore();
+        // If the user inputs multiple bad characters, we will ignore all of them
+        reset_stdin();
         // Display an error 
-        puts("Error: Invalid plant selected");
+        puts("Error: Invalid option selected");
       }
       continue; // And prompt the user again
     }
@@ -159,12 +167,12 @@ auto get_user_input() {
 }
 
 // Calculation Functions
-double calc_cost(const Item item) {
+Price calc_cost(const Item item) {
   return item.price * item.quantity;
 }
 
 // Sum the cost of the goods
-double calc_subtotal_cost(const Cart cart) {
+Price calc_subtotal_cost(const Cart cart) {
   Price cost = 0;
   for (auto [_, item]: cart)
     cost += calc_cost(item);
@@ -172,7 +180,7 @@ double calc_subtotal_cost(const Cart cart) {
 }
 
 // Apply PST and GST tax
-double calc_total_cost(const double cost) {
+Price calc_total_cost(const Price cost) {
   return cost + (cost * (GST + PST));
 }
 
