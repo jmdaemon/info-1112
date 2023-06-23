@@ -1,3 +1,4 @@
+#include <optional>
 #include <iostream>
 #include <iomanip>
 #include <tuple>
@@ -14,8 +15,9 @@ typedef double Price;
 const double PST = 0.07;
 const double GST = 0.05;
 
-// Plants
+// Program Variants
 enum PLANT_TYPE {
+  NONE,
   MONSTERA,
   PHILODENDRON,
   HOYA,
@@ -33,28 +35,40 @@ const double PLANT_PRICES[3] = {
   10.99,
 };
 
-typedef struct Plant {
+typedef struct Item {
   const char* name;
-  Amount stock;
+  Amount quantity;
   Price price;
+} Item;
+
+typedef struct Plant {
+  PLANT_TYPE type;
+  Item item;
 } Plant;
 
 // Make const/nonconst
-Plant None          = {NULL, 0, 0};
-Plant Monstera      = {"Monstera"     , PLANT_STOCK[0], PLANT_PRICES[0]};
-Plant Philodendron  = {"Philodendron" , PLANT_STOCK[1], PLANT_PRICES[1]};
-Plant Hoya          = {"Hoya"         , PLANT_STOCK[2], PLANT_PRICES[2]};
+Plant None          = {NONE, "", 0, 0};
+Plant Monstera      = {MONSTERA     , "Monstera"    , PLANT_STOCK[0], PLANT_PRICES[0]};
+Plant Philodendron  = {PHILODENDRON , "Philodendron", PLANT_STOCK[1], PLANT_PRICES[1]};
+Plant Hoya          = {HOYA         , "Hoya"        , PLANT_STOCK[2], PLANT_PRICES[2]};
 
 typedef std::vector<Plant> Cart;
 
 Plant get_plant_choice(char c) {
+  Plant result = None;
   switch(c) {
+    //case('M'): return std::optional<Plant> Monstera;
+    //case('P'): return std::optional<Plant> Philodendron;
+    //case('H'): return std::optional<Plant> Hoya;
+    //default: return std::optional<Plant> {};
     case('M'): return Monstera;
     case('P'): return Philodendron;
     case('H'): return Hoya;
-    default:
-       return None;
+    //default:
+       //return None;
   }
+  return result;
+  //return result;
 }
 
 auto get_user_input() {
@@ -77,7 +91,8 @@ auto get_user_input() {
     std::cin >> choice;
     choice = toupper(choice);
 
-    Plant plant = get_plant_choice(choice);
+    //Plant plant = get_plant_choice(choice);
+    std::optional<Plant> plant = get_plant_choice(choice);
     // If the plant choice is invalid, we will output an error and prompt the user again
     if (&plant == &None) {
       if (choice == 'A') {
