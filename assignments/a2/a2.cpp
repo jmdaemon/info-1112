@@ -38,7 +38,7 @@ enum ITEM_ID {
   HOYA,
 };
 
-// Plants
+// Current Store Inventory
 Item Monstera      = {"Monstera"    , 20, 11.50};
 Item Philodendron  = {"Philodendron", 20, 13.75};
 Item Hoya          = {"Hoya"        , 20, 10.99};
@@ -57,7 +57,7 @@ typedef std::map<ITEM_ID, Item> Cart;
 
 // The standard library still doesn't have a map.contains() method???
 template <typename K, typename V>
-bool hashmap_contains(std::map<K, V> hashmap, K key) {
+bool hashmap_contains(const std::map<K, V> hashmap, const K key) {
   return (hashmap.find(key) != hashmap.end());
 }
 
@@ -69,7 +69,7 @@ bool strequals(const char* s1, const char* s2) {
 void ln() { puts(""); }
 
 // Plant Functions
-ITEM_ID get_item_id(char c) {
+ITEM_ID get_item_id(const char c) {
   switch(c) {
     case('M'): return MONSTERA;
     case('P'): return PHILODENDRON;
@@ -78,7 +78,7 @@ ITEM_ID get_item_id(char c) {
   }
 }
 
-Item* lookup_item(ITEM_ID id) {
+Item* lookup_item(const ITEM_ID id) {
   return Inventory[id];
 }
 
@@ -100,7 +100,7 @@ Cart add_to_cart(Cart cart, Item* plant, ITEM_ID id, Amount amount) {
 }
 
 // User Input Functions
-void display_option(char choice, const char* option) {
+void display_option(const char choice, const char* option) {
   char choice_alt = toupper(choice);
   printf("\t[%c|%c] for %s\n", choice_alt, choice, option);
 };
@@ -157,12 +157,12 @@ auto get_user_input() {
 }
 
 // Calculation Functions
-double calc_cost(Item item) {
+double calc_cost(const Item item) {
   return (item.price * item.quantity);
 }
 
 // Sum the cost of the goods
-double calc_subtotal_cost(Cart cart) {
+double calc_subtotal_cost(const Cart cart) {
   double cost = 0;
   for (auto [_, item]: cart)
     cost += calc_cost(item);
@@ -170,11 +170,11 @@ double calc_subtotal_cost(Cart cart) {
 }
 
 // Apply PST and GST tax
-double calc_total_cost(double cost) {
-  return cost += (cost * (GST + PST));
+double calc_total_cost(const double cost) {
+  return cost + (cost * (GST + PST));
 }
 
-void print_receipt(Cart cart) {
+void print_receipt(const Cart cart) {
   auto print_plant_cost = [&](int amount, const char* name, double cost) {
     printf("%d %s plants cost $%.*f\n", amount, name, PRECISION, cost);
   };
@@ -210,7 +210,7 @@ std::string get_full_name() {
   return name;
 }
 
-Points calc_loyalty_points(Cart cart) {
+Points calc_loyalty_points(const Cart cart) {
   Points points = 0;
   
   for (auto [_, item]: cart) {
@@ -221,7 +221,7 @@ Points calc_loyalty_points(Cart cart) {
   return points;
 }
 
-void show_loyalty_points(const char* username, Cart cart) {
+void show_loyalty_points(const char* username, const Cart cart) {
   Points points = calc_loyalty_points(cart);
   printf("You earned %ld points on this purchase, %s.\n", points, username);
 }
@@ -253,7 +253,7 @@ const unsigned int NAME_FIELD = COL_WIDTH[0] * 4;
 // NOTE:
 // Keep in mind that a receipt is not very wide horizontally
 // So we need to print this table longer vertically instead
-void print_receipt_table(const char* username, Cart cart) {
+void print_receipt_table(const char* username, const Cart cart) {
   // Helper functions for displaying the receipt in a table
   auto left_justify_output    = []() { std::cout << std::left; };
   auto show_n_decimal_places  = [](unsigned int n) { std::cout << std::fixed << std::setprecision(n); };
