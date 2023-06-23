@@ -264,35 +264,33 @@ void print_receipt_table(Name username, const Cart cart) {
   auto print_col4 = [&](auto text) { print_col(COL_WIDTH[3], text); };
 
   // Print rows
-  auto print_2col_row = [&](auto col1, auto col2)
-    { print_col1(col1); print_col2(col2); puts(""); };
-  auto print_4col_row = [&](auto col1, auto col2, auto col3, auto col4)
-    { print_col1(col1); print_col2(col2); print_col3(col3); print_col4(col4); puts(""); };
+  auto print_row_2cols = [&](auto col1, auto col2) { print_col1(col1); print_col2(col2); ln(); };
+  auto print_row_4cols = [&](auto col1, auto col2, auto col3, auto col4)
+    { print_col1(col1); print_col2(col2); print_col3(col3); print_col4(col4); ln(); };
 
   // Print horizontal line
-  auto print_hline = [&]()      { set_fill_char('='); print_4col_row("", "", "", ""); set_fill_char(' '); };
-  auto print_empty_row = [&]()  { print_4col_row("", "", "", ""); };
+  auto print_hline = [&]()      { set_fill_char('='); print_row_4cols("", "", "", ""); set_fill_char(' '); };
+  auto print_empty_row = [&]()  { print_row_4cols("", "", "", ""); };
 
+  // Setup output for table format
   left_justify_output();
-  // Show 3 decimal places for any floating point number
   show_n_decimal_places(PRECISION); 
 
-  // Print customer's receipt
+  // Display the customer's receipt
 
-  // Print header of receipt
+  // Print receipt header
   puts("Customer Receipt");
   print_hline();
-  print_col1("Customer"); print_col(NAME_FIELD, username); puts("");
+  print_col1("Customer"); print_col(NAME_FIELD, username); ln();
 
-  // Print receipt
-  print_4col_row("Plant", "Quantity", "Cost ($)", "Stock Left");
+  // Print receipt body
+  print_row_4cols("Item", "Quantity", "Cost ($)", "Stock Left");
   for (auto [id, item]: cart) {
-    // TODO: Reduce code duplication with this
     Name name = item.name;
     const Amount amount = item.quantity;
     const Price cost = calc_cost(item);
     const Amount stock_available = lookup_item(id)->quantity;
-    print_4col_row(name, amount, cost, stock_available);
+    print_row_4cols(name, amount, cost, stock_available);
   }
   print_hline();
 
@@ -300,14 +298,14 @@ void print_receipt_table(Name username, const Cart cart) {
   const Price subtotal = calc_subtotal_cost(cart);
   const Price total = calc_total_cost(subtotal);
 
-  print_2col_row("Cost", "Amount ($)");
-  print_2col_row("Subtotal", subtotal);
-  print_2col_row("Total", total);
+  print_row_2cols("Cost", "Amount ($)");
+  print_row_2cols("Subtotal", subtotal);
+  print_row_2cols("Total", total);
   print_empty_row();
 
   // Show Loyalty Points
   const Points points = calc_loyalty_points(cart);
-  print_2col_row("Loyalty Points", points);
+  print_row_2cols("Loyalty Points", points);
 
   ln();
   puts("Thank you! Please come again!");
