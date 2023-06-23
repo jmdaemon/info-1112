@@ -190,8 +190,8 @@ void print_receipt(const Cart cart) {
     print_plant_cost(amount, name, cost);
   }
 
-  double subtotal = calc_subtotal_cost(cart);
-  double total = calc_total_cost(subtotal);
+  const Price subtotal = calc_subtotal_cost(cart);
+  const Price total = calc_total_cost(subtotal);
 
   printf("Total amount before tax is $%.*f\n", PRECISION, subtotal);
   printf("Total amount after tax is $%.*f\n", PRECISION, total);
@@ -214,17 +214,14 @@ std::string get_full_name() {
 
 Points calc_loyalty_points(const Cart cart) {
   Points points = 0;
-  
-  for (auto [_, item]: cart) {
-    if (item.quantity > 1) {
+  for (auto [_, item]: cart)
+    if (item.quantity > 1) 
       points += round(item.price / 0.75);
-    }
-  }
   return points;
 }
 
-void show_loyalty_points(const char* username, const Cart cart) {
-  Points points = calc_loyalty_points(cart);
+void show_loyalty_points(Name username, const Cart cart) {
+  const Points points = calc_loyalty_points(cart);
   printf("You earned %ld points on this purchase, %s.\n", points, username);
 }
 
@@ -240,26 +237,28 @@ const unsigned int COL_WIDTH[4] = {
 const unsigned int NAME_FIELD = COL_WIDTH[0] * 4;
 
 // Prints a receipt in the following format:
+//
 // Customer       [name]
-// Horizontal Line / Divider
+// Horizontal Line | Divider
 // Plant          Amount      Cost ($)  Stock Left
 // Monsterra      [amount]    [cost]    [plant.quantity]
 // Philodendron   [amount]    [cost]    [plant.quantity]
 // Hoya           [amount]    [cost]    [plant.quantity]
-// Horizontal Line / Divider
+// Horizontal Line | Divider
 // Cost           Amount ($)
 // Subtotal       [subtotal]
 // Total          [total]
+//
 // Loyalty Points [points]
 //
 // NOTE:
 // Keep in mind that a receipt is not very wide horizontally
 // So we need to print this table longer vertically instead
-void print_receipt_table(const char* username, const Cart cart) {
+void print_receipt_table(Name username, const Cart cart) {
   // Helper functions for displaying the receipt in a table
   auto left_justify_output    = []() { std::cout << std::left; };
-  auto show_n_decimal_places  = [](unsigned int n) { std::cout << std::fixed << std::setprecision(n); };
-  auto set_fill_char          = [](char c) { std::cout << std::setfill(c); };
+  auto show_n_decimal_places  = [](const unsigned int n) { std::cout << std::fixed << std::setprecision(n); };
+  auto set_fill_char          = [](const char c) { std::cout << std::setfill(c); };
   
   // Print columns
   auto print_col = [](int width, auto text) { std::cout << std::left << std::setw(width) << text; };
@@ -283,31 +282,35 @@ void print_receipt_table(const char* username, const Cart cart) {
   show_n_decimal_places(PRECISION); 
 
   // Print customer's receipt
+
+  // Print header of receipt
   puts("Customer Receipt");
   print_hline();
   print_col1("Customer"); print_col(NAME_FIELD, username); puts("");
-  print_4col_row("Plant", "Quantity", "Cost ($)", "Stock Left");
 
+  // Print receipt
+  print_4col_row("Plant", "Quantity", "Cost ($)", "Stock Left");
   for (auto [id, item]: cart) {
     // TODO: Reduce code duplication with this
-    int amount = item.quantity;
-    const char* name = item.name;
-    double cost = calc_cost(item);
-    int stock_available = lookup_item(id)->quantity;
+    Name name = item.name;
+    const Amount amount = item.quantity;
+    const Price cost = calc_cost(item);
+    const Amount stock_available = lookup_item(id)->quantity;
     print_4col_row(name, amount, cost, stock_available);
   }
-
-  double subtotal = calc_subtotal_cost(cart);
-  double total = calc_total_cost(subtotal);
-
   print_hline();
+
+  // Print total price
+  const Price subtotal = calc_subtotal_cost(cart);
+  const Price total = calc_total_cost(subtotal);
+
   print_2col_row("Cost", "Amount ($)");
   print_2col_row("Subtotal", subtotal);
   print_2col_row("Total", total);
   print_empty_row();
 
   // Show Loyalty Points
-  Points points = calc_loyalty_points(cart);
+  const Points points = calc_loyalty_points(cart);
   print_2col_row("Loyalty Points", points);
 
   ln();
@@ -329,18 +332,18 @@ int main(int argc, char** argv) {
 
   if (strequals(argv[1], "normal")) {
     // Part I:
-    Cart cart = get_user_input();
+    const Cart cart = get_user_input();
     print_receipt(cart);
   } else if (strequals(argv[1], "loyalty")) {
     // Part II:
-    std::string name = get_full_name();
-    Cart cart = get_user_input();
+    const std::string name = get_full_name();
+    const Cart cart = get_user_input();
     print_receipt(cart);
     show_loyalty_points(name.c_str(), cart);
   } else if (strequals(argv[1], "pretty-receipt")) {
     // Part III:
-    std::string name = get_full_name();
-    Cart cart = get_user_input();
+    const std::string name = get_full_name();
+    const Cart cart = get_user_input();
     print_receipt_table(name.c_str(), cart);
   }
 }
