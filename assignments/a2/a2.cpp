@@ -244,27 +244,15 @@ const unsigned int COL_WIDTH[4] = {
 };
 const unsigned int NAME_FIELD = COL_WIDTH[0] * 4;
 
-// Prints a receipt in the following format:
-//
-// Customer       [name]
-// Horizontal Line | Divider
-// Plant          Amount      Cost ($)  Stock Left
-// Monsterra      [amount]    [cost]    [plant.quantity]
-// Philodendron   [amount]    [cost]    [plant.quantity]
-// Hoya           [amount]    [cost]    [plant.quantity]
-// Horizontal Line | Divider
-// Cost           Amount ($)
-// Subtotal       [subtotal]
-// Total          [total]
-//
-// Loyalty Points [points]
+// Display customer's receipt in an aligned table
 //
 // NOTE:
 // Keep in mind that a receipt is not very wide horizontally
 // So we need to print this table longer vertically instead
 void print_receipt_table(Name username, const Cart cart) {
-  // Helper functions for displaying the receipt in a table
+  // Helper lambda functions for displaying the receipt in a table
   auto left_justify_output    = []() { std::cout << std::left; };
+  auto right_justify_output   = []() { std::cout << std::right; };
   auto show_n_decimal_places  = [](const unsigned int n) { std::cout << std::fixed << std::setprecision(n); };
   auto set_fill_char          = [](const char c) { std::cout << std::setfill(c); };
   
