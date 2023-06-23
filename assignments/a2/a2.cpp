@@ -24,9 +24,10 @@ const double GST = 0.05;
 // Types
 typedef unsigned int Amount;
 typedef double Price;
+typedef const char* Name;
 
 typedef struct Item {
-  const char* name;
+  Name name;
   Amount quantity;
   Price price;
 } Item;
@@ -164,7 +165,7 @@ double calc_cost(const Item item) {
 
 // Sum the cost of the goods
 double calc_subtotal_cost(const Cart cart) {
-  double cost = 0;
+  Price cost = 0;
   for (auto [_, item]: cart)
     cost += calc_cost(item);
   return cost;
@@ -176,16 +177,16 @@ double calc_total_cost(const double cost) {
 }
 
 void print_receipt(const Cart cart) {
-  auto print_plant_cost = [&](int amount, const char* name, double cost) {
+  auto print_plant_cost = [&](const Amount amount, Name name, const Price cost) {
     printf("%d %s plants cost $%.*f\n", amount, name, PRECISION, cost);
   };
 
   // Print receipt
   puts("Units/Description/Cost of Items");
   for (auto [_, item]: cart) {
-    int amount = item.quantity;
-    const char* name = item.name;
-    double cost = calc_cost(item);
+    Name name = item.name;
+    const Amount amount = item.quantity;
+    const Price cost = calc_cost(item);
     print_plant_cost(amount, name, cost);
   }
 
