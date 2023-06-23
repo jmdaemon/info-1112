@@ -48,12 +48,26 @@ std::map<PLANT_TYPE, Item*> Plants = {
   { HOYA, &Hoya },
 };
 
+// Use a hashmap to bucket the items together
+// We're going to batch the items together, and deal with any repeats by summing the quantities to each other
 typedef std::map<PLANT_TYPE, Item> Cart;
+
+// General Purpose Functions
+
+// The standard library still doesn't have a map.contains() method???
+template <typename K, typename V>
+bool hashmap_contains(std::map<K, V> hashmap, K key) {
+  return (hashmap.find(key) != hashmap.end());
+}
 
 bool strequals(const char* s1, const char* s2) {
   return (strcmp(s1, s2) == 0);
 }
 
+// Print newline
+void ln() { puts(""); }
+
+// Plant Functions
 PLANT_TYPE get_plant_type(char c) {
   switch(c) {
     case('M'): return MONSTERA;
@@ -67,11 +81,6 @@ Item* get_plant_choice(PLANT_TYPE type) {
   return Plants[type];
 }
 
-template <typename K, typename V>
-bool found_in_hashmap(std::map<K, V> hashmap, K key) {
-  return (hashmap.find(key) != hashmap.end());
-}
-
 auto get_user_input() {
   auto display_option = [](char choice, const char* option) {
     char choice_alt = toupper(choice);
@@ -82,7 +91,8 @@ auto get_user_input() {
   Cart cart;
 
   puts("Welcome to Tom's Nursery Shop");
-  while (choice != 'A') {
+  while(choice != 'A') {
+    // Get valid item choice
     puts("Select from our plants below or checkout: ");
     display_option('m', "Monstera");
     display_option('p', "Philodendron");
@@ -97,12 +107,14 @@ auto get_user_input() {
     // If the plant choice is invalid, we will output an error and prompt the user again
     if (plant == NULL) {
       if (choice != 'A') {
-        puts("");
+        // TODO: Find way to clear input in case of null characters
+        ln();
         puts("Error: Invalid plant selected");
       }
       continue; // Return to prompt
     }
 
+    // Get valid amount to purchase
     Amount amount;
     printf("How many %s pots would you like to buy?: ", plant->name);
     std::cin >> amount;
@@ -118,14 +130,15 @@ auto get_user_input() {
       // Deduct the stock
       plant->quantity -= amount;
       
-      if (found_in_hashmap(cart, type)) {
-        cart[type].quantity += amount;
+      // If we already have one of that item type in our bucket
+      if (hashmap_contains(cart, type)) {
+        cart[type].quantity += amount; // Just add the amounts together
       } else {
         // Add to cart
         cart[type] = purchase;
       }
     }
-    puts("");
+    ln();
   }
   return cart;
 }
