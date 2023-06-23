@@ -43,7 +43,7 @@ Item Monstera      = {"Monstera"    , 20, 11.50};
 Item Philodendron  = {"Philodendron", 20, 13.75};
 Item Hoya          = {"Hoya"        , 20, 10.99};
 
-std::map<ITEM_ID, Item*> Plants = {
+std::map<ITEM_ID, Item*> Inventory = {
   { MONSTERA, &Monstera },
   { PHILODENDRON, &Philodendron },
   { HOYA, &Hoya },
@@ -69,7 +69,7 @@ bool strequals(const char* s1, const char* s2) {
 void ln() { puts(""); }
 
 // Plant Functions
-ITEM_ID get_plant_id(char c) {
+ITEM_ID get_item_id(char c) {
   switch(c) {
     case('M'): return MONSTERA;
     case('P'): return PHILODENDRON;
@@ -79,7 +79,7 @@ ITEM_ID get_plant_id(char c) {
 }
 
 Item* get_plant_choice(ITEM_ID id) {
-  return Plants[id];
+  return Inventory[id];
 }
 
 Cart add_to_cart(Cart cart, Item* plant, ITEM_ID id, Amount amount) {
@@ -126,7 +126,7 @@ auto get_user_input() {
   puts("Welcome to Tom's Nursery Shop");
   while(choice != 'A') {
     choice = toupper(get_user_choice());
-    ITEM_ID id = get_plant_id(choice);
+    ITEM_ID id = get_item_id(choice);
     Item* plant = get_plant_choice(id);
     ln();
     if (plant == NULL) {
