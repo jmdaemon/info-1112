@@ -81,6 +81,23 @@ Item* get_plant_choice(PLANT_TYPE type) {
   return Plants[type];
 }
 
+Cart add_to_cart(Cart cart, Item* plant, PLANT_TYPE type, Amount amount) {
+  // Queue the purchase
+  Item purchase = { plant->name, amount, plant->price };
+
+  // Deduct the stock
+  plant->quantity -= amount;
+  
+  // If we already have one of that item type in our bucket
+  if (hashmap_contains(cart, type)) {
+    cart[type].quantity += amount; // Just add the amounts together
+  } else {
+    // Add to cart
+    cart[type] = purchase;
+  }
+  return cart;
+}
+
 auto get_user_input() {
   auto display_option = [](char choice, const char* option) {
     char choice_alt = toupper(choice);
@@ -123,21 +140,9 @@ auto get_user_input() {
       puts("");
       puts("Sorry. There are not enough of this plant available in stock.");
       printf("Amount Available: %d\n", plant->quantity);
-    } else {
-      // Queue the purchase
-      Item purchase = { plant->name, amount, plant->price };
-
-      // Deduct the stock
-      plant->quantity -= amount;
-      
-      // If we already have one of that item type in our bucket
-      if (hashmap_contains(cart, type)) {
-        cart[type].quantity += amount; // Just add the amounts together
-      } else {
-        // Add to cart
-        cart[type] = purchase;
-      }
-    }
+      continue; // Return to prompt
+    } 
+    cart = add_to_cart(cart, plant, type, amount);
     ln();
   }
   return cart;
