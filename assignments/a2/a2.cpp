@@ -242,8 +242,6 @@ const unsigned int COL_WIDTH[4] = {
   10,
   10,
 };
-const unsigned int NAME_FIELD = COL_WIDTH[0] * 4;
-
 // Display customer's receipt in an aligned table
 //
 // NOTE:
@@ -281,7 +279,7 @@ void print_receipt_table(Name username, const Cart cart) {
   // Print receipt header
   puts("Customer Receipt");
   print_hline();
-  print_col1("Customer"); print_col(NAME_FIELD, username); ln();
+  print_row_2cols("Customer", username);
 
   // Print receipt body
   print_row_4cols("Item", "Quantity", "Cost ($)", "Stock Left");
