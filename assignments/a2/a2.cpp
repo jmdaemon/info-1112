@@ -63,6 +63,8 @@ bool hashmap_contains(const std::map<K, V> hashmap, const K key) {
   return (hashmap.find(key) != hashmap.end());
 }
 
+bool strequals(const char* s1, const char* s2) { return strcmp(s1, s2) == 0; }
+
 // Print newline
 void ln() { puts(""); }
 
@@ -126,12 +128,13 @@ auto get_user_input() {
   while(choice != 'A') {
     choice = toupper(get_user_choice());
     const ITEM_ID id = get_item_id(choice);
-    const Item* plant = lookup_item(id);
+    const Item* item = lookup_item(id);
     ln();
-    if (plant == NULL) {
+    if (item == NULL) {
       // If the plant choice is invalid
       if (choice != 'A') {
         // TODO: Find way to clear input in case of null characters
+        std::cin.ignore();
         // Display an error 
         puts("Error: Invalid plant selected");
       }
@@ -140,16 +143,16 @@ auto get_user_input() {
 
     // Get valid amount to purchase
     Amount amount;
-    printf("How many %s pots would you like to buy?: ", plant->name);
+    printf("How many %s pots would you like to buy?: ", item->name);
     std::cin >> amount;
 
-    if (amount > plant->quantity) {
+    if (amount > item->quantity) {
       ln();
       puts("Sorry. There are not enough of this plant available in stock.");
-      printf("Amount Available: %d\n", plant->quantity);
+      printf("Amount Available: %d\n", item->quantity);
       continue; // Return to prompt
     } 
-    cart = add_to_cart(id, (Item*) plant, amount, cart);
+    cart = add_to_cart(id, (Item*) item, amount, cart);
     ln();
   }
   return cart;
@@ -157,7 +160,7 @@ auto get_user_input() {
 
 // Calculation Functions
 double calc_cost(const Item item) {
-  return (item.price * item.quantity);
+  return item.price * item.quantity;
 }
 
 // Sum the cost of the goods
@@ -318,29 +321,30 @@ int main(int argc, char** argv) {
   // Process command line arguments
   if ((argc < 2) || (argc > 2)) {
     puts("Error. Invalid number of arguments.");
-    printf("Usage: %s [normal|loyalty|pretty-receipt]\n", argv[0]);
     puts("Please provide a mode to run the program.");
     puts("Available modes are: ");
     puts("\tnormal        : Part I of the assignment");
     puts("\tloyalty       : Part II of the assignment");
     puts("\tpretty-receipt: Part III of the assignment");
+    printf("Usage: %s [normal|loyalty|pretty-receipt]\n", argv[0]);
     return -1;
   }
 
-  if (strcmp(argv[1], "normal")) {
+  if (strequals(argv[1], "normal")) {
     // Part I:
     const Cart cart = get_user_input();
     print_receipt(cart);
-  } else if (strcmp(argv[1], "loyalty")) {
+  } else if (strequals(argv[1], "loyalty")) {
     // Part II:
     const std::string name = get_full_name();
     const Cart cart = get_user_input();
     print_receipt(cart);
     show_loyalty_points(name.c_str(), cart);
-  } else if (strcmp(argv[1], "pretty-receipt")) {
+  } else if (strequals(argv[1], "pretty-receipt")) {
     // Part III:
     const std::string name = get_full_name();
     const Cart cart = get_user_input();
     print_receipt_table(name.c_str(), cart);
   }
+  return 0;
 }
