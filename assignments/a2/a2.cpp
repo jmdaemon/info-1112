@@ -31,18 +31,6 @@ enum PLANT_TYPE {
   HOYA,
 };
 
-const Amount PLANT_STOCK[3] = {
-  20,
-  20,
-  20,
-};
-
-const double PLANT_PRICES[3] = {
-  11.50,
-  13.75,
-  10.99,
-};
-
 typedef struct Item {
   const char* name;
   Amount quantity;
@@ -50,9 +38,9 @@ typedef struct Item {
 } Item;
 
 // Plants
-Item Monstera      = {"Monstera"    , PLANT_STOCK[0], PLANT_PRICES[0]};
-Item Philodendron  = {"Philodendron", PLANT_STOCK[1], PLANT_PRICES[1]};
-Item Hoya          = {"Hoya"        , PLANT_STOCK[2], PLANT_PRICES[2]};
+Item Monstera      = {"Monstera"    , 20, 11.50};
+Item Philodendron  = {"Philodendron", 20, 13.75};
+Item Hoya          = {"Hoya"        , 20, 10.99};
 
 std::map<PLANT_TYPE, Item*> Plants = {
   { MONSTERA, &Monstera },
