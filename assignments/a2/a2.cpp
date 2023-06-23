@@ -49,15 +49,16 @@ typedef struct Item {
   Price price;
 } Item;
 
-typedef struct Plant {
-  PLANT_TYPE type;
-  Item item;
-} Plant;
+// Plants
+Item Monstera      = {"Monstera"    , PLANT_STOCK[0], PLANT_PRICES[0]};
+Item Philodendron  = {"Philodendron", PLANT_STOCK[1], PLANT_PRICES[1]};
+Item Hoya          = {"Hoya"        , PLANT_STOCK[2], PLANT_PRICES[2]};
 
-// Make const/nonconst
-Plant Monstera      = {MONSTERA     , "Monstera"    , PLANT_STOCK[0], PLANT_PRICES[0]};
-Plant Philodendron  = {PHILODENDRON , "Philodendron", PLANT_STOCK[1], PLANT_PRICES[1]};
-Plant Hoya          = {HOYA         , "Hoya"        , PLANT_STOCK[2], PLANT_PRICES[2]};
+std::map<PLANT_TYPE, Item*> Plants = {
+  { MONSTERA, &Monstera },
+  { PHILODENDRON, &Philodendron },
+  { HOYA, &Hoya },
+};
 
 typedef std::map<PLANT_TYPE, Item> Cart;
 
@@ -65,25 +66,17 @@ bool strequals(const char* s1, const char* s2) {
   return (strcmp(s1, s2) == 0);
 }
 
-Plant* get_plant_choice(char c) {
-  Plant* result = NULL;
+PLANT_TYPE get_plant_type(char c) {
   switch(c) {
-    case('M'): result = &Monstera; break;
-    case('P'): result = &Philodendron; break;
-    case('H'): result = &Hoya; break;
+    case('M'): return MONSTERA;
+    case('P'): return PHILODENDRON;
+    case('H'): return HOYA;
+    default: return NONE;
   }
-  return result;
 }
 
-Plant* get_plant_choice_type(PLANT_TYPE type) {
-  Plant* result = NULL;
-  switch(type) {
-    case(MONSTERA): result = &Monstera; break;
-    case(PHILODENDRON): result = &Philodendron; break;
-    case(HOYA): result = &Hoya; break;
-    default: result = NULL;
-  }
-  return result;
+Item* get_plant_choice(PLANT_TYPE type) {
+  return Plants[type];
 }
 
 template <typename K, typename V>
@@ -111,7 +104,8 @@ auto get_user_input() {
     std::cin >> choice;
     choice = toupper(choice);
 
-    Plant* plant = get_plant_choice(choice);
+    PLANT_TYPE type = get_plant_type(choice);
+    Item* plant = get_plant_choice(type);
     // If the plant choice is invalid, we will output an error and prompt the user again
     if (plant == NULL) {
       if (choice != 'A') {
@@ -121,27 +115,26 @@ auto get_user_input() {
       continue; // Return to prompt
     }
 
-    Item item = plant->item;
     Amount amount;
-    printf("How many %s pots would you like to buy?: ", item.name);
+    printf("How many %s pots would you like to buy?: ", plant->name);
     std::cin >> amount;
 
-    if (amount > item.quantity) {
+    if (amount > plant->quantity) {
       puts("");
       puts("Sorry. There are not enough of this plant available in stock.");
-      printf("Amount Available: %d\n", item.quantity);
+      printf("Amount Available: %d\n", plant->quantity);
     } else {
       // Queue the purchase
-      Item purchase = { item.name, amount, item.price };
+      Item purchase = { plant->name, amount, plant->price };
 
       // Deduct the stock
-      item.quantity -= amount;
+      plant->quantity -= amount;
       
-      if (found_in_hashmap(cart, plant->type)) {
-        cart[plant->type].quantity += amount;
+      if (found_in_hashmap(cart, type)) {
+        cart[type].quantity += amount;
       } else {
         // Add to cart
-        cart[plant->type] = purchase;
+        cart[type] = purchase;
       }
     }
     puts("");
@@ -280,7 +273,7 @@ void print_receipt_table(const char* username, Cart cart) {
     int amount = item.quantity;
     const char* name = item.name;
     double cost = calc_cost(item);
-    int stock_available = get_plant_choice_type(type)->item.quantity;
+    int stock_available = get_plant_choice(type)->quantity;
     print_4col_row(name, amount, cost, stock_available);
   }
   double subtotal = calc_subtotal_cost(cart);
