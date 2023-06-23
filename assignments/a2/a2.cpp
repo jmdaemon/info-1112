@@ -89,11 +89,11 @@ auto get_user_input() {
     if (plant == NULL) {
       if (choice != 'A')
         puts("Error: Invalid plant selected");
-      continue;
+      continue; // Return to prompt
     } 
 
     Item item = plant->item;
-    int amount;
+    Amount amount;
     printf("How many %s pots would you like to buy?: ", item.name);
     std::cin >> amount;
 
@@ -101,15 +101,16 @@ auto get_user_input() {
       puts("Sorry. There are not enough of this plant available in stock.");
       printf("Amount Available: %d\n", item.quantity);
     } else {
+      // Queue the purchase
+      // Clone the plant
+      Plant purchase = { plant-> type, Item { item.name, amount, item.price }};
+      //purchase.type = plant->type;
+      //purchase.item.name = item.name;
+      //purchase.item.price = item.price;
+      //purchase.item.quantity += amount;
+
       // Deduct the stock
       item.quantity -= amount;
-
-      // Queue the purchase
-      Plant purchase;
-      purchase.type = plant->type;
-      purchase.item.name = item.name;
-      purchase.item.price = item.price;
-      purchase.item.quantity += amount;
 
       // Add to cart
       cart.push_back(purchase);
@@ -118,14 +119,15 @@ auto get_user_input() {
   return cart;
 }
 
-Cart batch_cart(Cart cart) {
-  for (auto purchase: cart) {
-    switch(purchase.type) {
-      case(MONSTERA): 
-    }
-  }
-}
+//Cart batch_cart(Cart cart) {
+  //for (auto purchase: cart) {
+    //switch(purchase.type) {
+      //case(MONSTERA): 
+    //}
+  //}
+//}
 
+// Calculation
 double calc_cost(Item item) {
   return (item.price * item.quantity);
 }
@@ -140,7 +142,7 @@ double calc_subtotal_cost(Cart cart) {
   return cost;
 }
 
-// Apply taxes
+// Apply PST and GST tax
 double calc_total_cost(double cost) {
   return cost * (GST + PST);
 }
