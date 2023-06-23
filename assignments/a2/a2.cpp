@@ -193,15 +193,14 @@ void print_receipt(Cart cart) {
 
 // Constants
 const unsigned int COL1_WIDTH = 16;
-const unsigned int COL2_WIDTH = 16;
-const unsigned int COL3_WIDTH = 16;
-const unsigned int COL4_WIDTH = 16;
+const unsigned int COL2_WIDTH = 10;
+const unsigned int COL3_WIDTH = 10;
+const unsigned int COL4_WIDTH = 8;
 const unsigned int NAME_FIELD = COL1_WIDTH * 4;
 
 std::string get_user_name() {
   std::string name;
   printf("Enter customer name: ");
-  //std::cin.ignore();
   std::getline(std::cin, name, '\n');
   return name;
 }
@@ -261,9 +260,6 @@ void print_receipt_table(const char* username, Cart cart) {
   double subtotal = calc_subtotal_cost(cart);
   double total = calc_total_cost(subtotal);
 
-  //print_4col_row("Monsterra", 0, 0, 0);
-  //print_4col_row("Philodendron", 0, 0, 0);
-  //print_4col_row("Hoya", 0, 0, 0);
   print_hline();
   print_2col_row("Subtotal", subtotal);
   print_2col_row("Total", total);
@@ -277,7 +273,7 @@ int main() {
   //Cart cart = get_user_input();
   //print_receipt(cart);
 
-  // Part II:
+  // Part III:
   std::string name = get_user_name();
   Cart cart = get_user_input();
   print_receipt_table(name.c_str(), cart);
