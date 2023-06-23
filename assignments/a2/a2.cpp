@@ -51,7 +51,8 @@ std::map<ITEM_ID, Item*> Inventory = {
 };
 
 // Use a hashmap to bucket the items together
-// We're going to batch the items together, and deal with any repeats by summing the quantities to each other
+// We're going to batch the items together, and group alike items together in their respective buckets
+// by summing their quantities together
 typedef std::map<ITEM_ID, Item> Cart;
 
 // General Purpose Functions
@@ -60,10 +61,6 @@ typedef std::map<ITEM_ID, Item> Cart;
 template <typename K, typename V>
 bool hashmap_contains(const std::map<K, V> hashmap, const K key) {
   return (hashmap.find(key) != hashmap.end());
-}
-
-bool strequals(const char* s1, const char* s2) {
-  return (strcmp(s1, s2) == 0);
 }
 
 // Print newline
@@ -330,17 +327,17 @@ int main(int argc, char** argv) {
     return -1;
   }
 
-  if (strequals(argv[1], "normal")) {
+  if (strcmp(argv[1], "normal")) {
     // Part I:
     const Cart cart = get_user_input();
     print_receipt(cart);
-  } else if (strequals(argv[1], "loyalty")) {
+  } else if (strcmp(argv[1], "loyalty")) {
     // Part II:
     const std::string name = get_full_name();
     const Cart cart = get_user_input();
     print_receipt(cart);
     show_loyalty_points(name.c_str(), cart);
-  } else if (strequals(argv[1], "pretty-receipt")) {
+  } else if (strcmp(argv[1], "pretty-receipt")) {
     // Part III:
     const std::string name = get_full_name();
     const Cart cart = get_user_input();
