@@ -98,37 +98,44 @@ Cart add_to_cart(Cart cart, Item* plant, PLANT_TYPE type, Amount amount) {
   return cart;
 }
 
-auto get_user_input() {
-  auto display_option = [](char choice, const char* option) {
-    char choice_alt = toupper(choice);
-    printf("\t[%c|%c] for %s\n", choice_alt, choice, option);
-  };
+// User Input Functions
+void display_option(char choice, const char* option) {
+  char choice_alt = toupper(choice);
+  printf("\t[%c|%c] for %s\n", choice_alt, choice, option);
+};
 
+// Get user's choice
+char get_user_choice() {
+  char choice;
+  puts("Select from our plants below or checkout: ");
+  display_option('m', "Monstera");
+  display_option('p', "Philodendron");
+  display_option('h', "Hoya");
+  display_option('a', "Checkout");
+  printf("Select: ");
+  std::cin >> choice;
+
+  return choice;
+}
+
+auto get_user_input() {
   char choice;
   Cart cart;
 
   puts("Welcome to Tom's Nursery Shop");
   while(choice != 'A') {
-    // Get valid item choice
-    puts("Select from our plants below or checkout: ");
-    display_option('m', "Monstera");
-    display_option('p', "Philodendron");
-    display_option('h', "Hoya");
-    display_option('a', "Checkout");
-    printf("Select: ");
-    std::cin >> choice;
-    choice = toupper(choice);
-
+    choice = toupper(get_user_choice());
     PLANT_TYPE type = get_plant_type(choice);
     Item* plant = get_plant_choice(type);
-    // If the plant choice is invalid, we will output an error and prompt the user again
+    ln();
     if (plant == NULL) {
+      // If the plant choice is invalid
       if (choice != 'A') {
         // TODO: Find way to clear input in case of null characters
-        ln();
+        // Display an error 
         puts("Error: Invalid plant selected");
       }
-      continue; // Return to prompt
+      continue; // And prompt the user again
     }
 
     // Get valid amount to purchase
@@ -137,7 +144,7 @@ auto get_user_input() {
     std::cin >> amount;
 
     if (amount > plant->quantity) {
-      puts("");
+      ln();
       puts("Sorry. There are not enough of this plant available in stock.");
       printf("Amount Available: %d\n", plant->quantity);
       continue; // Return to prompt
@@ -148,7 +155,7 @@ auto get_user_input() {
   return cart;
 }
 
-// Calculation
+// Calculation Functions
 double calc_cost(Item item) {
   return (item.price * item.quantity);
 }
@@ -186,7 +193,7 @@ void print_receipt(Cart cart) {
   printf("Total amount before tax is $%.*f\n", PRECISION, subtotal);
   printf("Total amount after tax is $%.*f\n", PRECISION, total);
   
-  puts("");
+  ln();
   puts("Thank you! Please come again!");
 }
 
@@ -231,21 +238,28 @@ const unsigned int NAME_FIELD = COL_WIDTH[0] * 4;
 
 // Prints a receipt in the following format:
 // Customer       [name]
-// Plant          Amount      Cost      Stock Left
+// Horizontal Line / Divider
+// Plant          Amount      Cost ($)  Stock Left
 // Monsterra      [amount]    [cost]    [plant.quantity]
 // Philodendron   [amount]    [cost]    [plant.quantity]
 // Hoya           [amount]    [cost]    [plant.quantity]
+// Horizontal Line / Divider
+// Cost           Amount ($)
 // Subtotal       [subtotal]
 // Total          [total]
 // Loyalty Points [points]
+//
+// NOTE:
+// Keep in mind that a receipt is not very wide horizontally
+// So we need to print this table longer vertically instead
 void print_receipt_table(const char* username, Cart cart) {
   // Helper functions for displaying the receipt in a table
-  auto left_justify_output   = []() { std::cout << std::left; };
-  auto show_n_decimal_places = [](unsigned int n) { std::cout << std::fixed << std::setprecision(n); };
+  auto left_justify_output    = []() { std::cout << std::left; };
+  auto show_n_decimal_places  = [](unsigned int n) { std::cout << std::fixed << std::setprecision(n); };
+  auto set_fill_char          = [](char c) { std::cout << std::setfill(c); };
   
   // Print columns
-  auto print_col = [](int width, auto text)
-    { std::cout << std::left << std::setw(width) << text; };
+  auto print_col = [](int width, auto text) { std::cout << std::left << std::setw(width) << text; };
   auto print_col1 = [&](auto text) { print_col(COL_WIDTH[0], text); };
   auto print_col2 = [&](auto text) { print_col(COL_WIDTH[1], text); };
   auto print_col3 = [&](auto text) { print_col(COL_WIDTH[2], text); };
@@ -258,34 +272,31 @@ void print_receipt_table(const char* username, Cart cart) {
     { print_col1(col1); print_col2(col2); print_col3(col3); print_col4(col4); puts(""); };
 
   // Print horizontal line
-  auto print_hline = [&]() {
-    std::cout << std::setfill('=');
-    print_4col_row("", "", "", "");
-    std::cout << std::setfill(' ');
-  };
-  auto print_empty_row = [&]() {
-    print_4col_row("", "", "", "");
-  };
+  auto print_hline = [&]()      { set_fill_char('='); print_4col_row("", "", "", ""); set_fill_char(' '); };
+  auto print_empty_row = [&]()  { print_4col_row("", "", "", ""); };
 
   left_justify_output();
   // Show 3 decimal places for any floating point number
   show_n_decimal_places(PRECISION); 
 
+  // Print customer's receipt
   puts("Customer Receipt");
   print_hline();
   print_col1("Customer"); print_col(NAME_FIELD, username); puts("");
   print_4col_row("Plant", "Quantity", "Cost ($)", "Stock Left");
+
   for (auto [type, item]: cart) {
+    // TODO: Reduce code duplication with this
     int amount = item.quantity;
     const char* name = item.name;
     double cost = calc_cost(item);
     int stock_available = get_plant_choice(type)->quantity;
     print_4col_row(name, amount, cost, stock_available);
   }
+
   double subtotal = calc_subtotal_cost(cart);
   double total = calc_total_cost(subtotal);
 
-  //print_empty_row();
   print_hline();
   print_2col_row("Cost", "Amount ($)");
   print_2col_row("Subtotal", subtotal);
@@ -296,7 +307,7 @@ void print_receipt_table(const char* username, Cart cart) {
   Points points = calc_loyalty_points(cart);
   print_2col_row("Loyalty Points", points);
 
-  puts("");
+  ln();
   puts("Thank you! Please come again!");
 }
 
