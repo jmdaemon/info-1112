@@ -1,16 +1,25 @@
+/**
+  * Student Name    : Joseph Diza
+  * Student Number  : 100427500
+  * Course Name     : INFO 1112 S10
+  **/
+
 #include <iostream>
 #include <iomanip>
 #include <tuple>
 #include <cstdio>
 #include <vector>
+#include <string>
 #include <map>
 
 // Part I
 typedef unsigned int Amount;
 typedef double Price;
 
-// Taxes
+// Constants
+const unsigned int PRECISION = 3;
 
+// Taxes
 // Tax amounts in B.C
 const double PST = 0.07;
 const double GST = 0.05;
@@ -63,6 +72,17 @@ Plant* get_plant_choice(char c) {
   return result;
 }
 
+Plant* get_plant_choice_type(PLANT_TYPE type) {
+  Plant* result = NULL;
+  switch(type) {
+    case(MONSTERA): result = &Monstera; break;
+    case(PHILODENDRON): result = &Philodendron; break;
+    case(HOYA): result = &Hoya; break;
+    default: result = NULL;
+  }
+  return result;
+}
+
 template <typename K, typename V>
 bool found_in_hashmap(std::map<K, V> hashmap, K key) {
   return (hashmap.find(key) != hashmap.end());
@@ -78,7 +98,7 @@ auto get_user_input() {
   Cart cart;
 
   puts("Welcome to Tom's Nursery Shop");
-  while(choice != 'A') {
+  while (choice != 'A') {
     puts("Select from our plants below or checkout: ");
     display_option('m', "Monstera");
     display_option('p', "Philodendron");
@@ -145,8 +165,6 @@ double calc_total_cost(double cost) {
 }
 
 void print_receipt(Cart cart) {
-  const unsigned int PRECISION = 3;
-
   auto print_plant_cost = [&](int amount, const char* name, double cost) {
     printf("%d %s plants cost $%.*f\n", amount, name, PRECISION, cost);
   };
@@ -173,7 +191,94 @@ void print_receipt(Cart cart) {
 // Part II
 // Part III
 
+// Constants
+const unsigned int COL1_WIDTH = 16;
+const unsigned int COL2_WIDTH = 16;
+const unsigned int COL3_WIDTH = 16;
+const unsigned int COL4_WIDTH = 16;
+const unsigned int NAME_FIELD = COL1_WIDTH * 4;
+
+std::string get_user_name() {
+  std::string name;
+  printf("Enter customer name: ");
+  //std::cin.ignore();
+  std::getline(std::cin, name, '\n');
+  return name;
+}
+
+// Prints a receipt in the following format:
+// Customer       [name]
+// Plant          Amount      Cost      Stock Left
+// Monsterra      [amount]    [cost]    [plant.quantity]
+// Philodendron   [amount]    [cost]    [plant.quantity]
+// Hoya           [amount]    [cost]    [plant.quantity]
+// Subtotal       [subtotal]
+// Total          [total]
+// Loyalty Points [points]
+void print_receipt_table(const char* username, Cart cart) {
+  // Helper functions for displaying the receipt in a table
+  auto left_justify_output   = []() { std::cout << std::left; };
+  auto show_n_decimal_places = [](unsigned int n) { std::cout << std::fixed << std::setprecision(n); };
+  
+  // Print columns
+  auto print_col = [](int width, auto text)
+    { std::cout << std::left << std::setw(width) << text; };
+  auto print_col1 = [&](auto text) { print_col(COL1_WIDTH, text); };
+  auto print_col2 = [&](auto text) { print_col(COL2_WIDTH, text); };
+  auto print_col3 = [&](auto text) { print_col(COL3_WIDTH, text); };
+  auto print_col4 = [&](auto text) { print_col(COL4_WIDTH, text); };
+
+  // Print rows
+  auto print_2col_row = [&](auto col1, auto col2)
+    { print_col1(col1); print_col2(col2); puts(""); };
+  auto print_4col_row = [&](auto col1, auto col2, auto col3, auto col4) {
+    print_col1(col1); print_col2(col2);
+    print_col3(col3); print_col4(col4); puts("");
+  };
+
+  // Print horizontal line
+  auto print_hline = [&]() {
+    std::cout << std::setfill('=');
+    print_4col_row("", "", "", "");
+    std::cout << std::setfill(' ');
+  };
+
+  left_justify_output();
+  // Show 3 decimal places for any floating point number
+  show_n_decimal_places(PRECISION); 
+
+  puts("Customer Receipt");
+  print_hline();
+  print_col1("Customer"); print_col(COL1_WIDTH * 4, username); puts("");
+  print_4col_row("Plant", "Amount", "Cost", "Stock Left");
+  for (auto [type, item]: cart) {
+    int amount = item.quantity;
+    const char* name = item.name;
+    double cost = calc_cost(item);
+    int stock_available = get_plant_choice_type(type)->item.quantity;
+    print_4col_row(name, amount, cost, stock_available);
+  }
+  double subtotal = calc_subtotal_cost(cart);
+  double total = calc_total_cost(subtotal);
+
+  //print_4col_row("Monsterra", 0, 0, 0);
+  //print_4col_row("Philodendron", 0, 0, 0);
+  //print_4col_row("Hoya", 0, 0, 0);
+  print_hline();
+  print_2col_row("Subtotal", subtotal);
+  print_2col_row("Total", total);
+
+  puts("");
+  puts("Thank you! Please come again!");
+}
+
 int main() {
+  // Part I:
+  //Cart cart = get_user_input();
+  //print_receipt(cart);
+
+  // Part II:
+  std::string name = get_user_name();
   Cart cart = get_user_input();
-  print_receipt(cart);
+  print_receipt_table(name.c_str(), cart);
 }
