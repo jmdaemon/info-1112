@@ -4,14 +4,12 @@
   * Course Name     : INFO 1112 S10
   **/
 
-#include <iostream>
-#include <iomanip>
-#include <tuple>
 #include <cstdio>
-#include <vector>
-#include <string>
 #include <cstring>
+#include <iomanip>
+#include <iostream>
 #include <map>
+#include <string>
 
 // Part I: Tom's Nursery Shop
 typedef unsigned int Amount;
