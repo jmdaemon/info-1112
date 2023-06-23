@@ -68,7 +68,7 @@ bool strequals(const char* s1, const char* s2) {
 // Print newline
 void ln() { puts(""); }
 
-// Plant Functions
+// Inventory Management Functions
 ITEM_ID get_item_id(const char c) {
   switch(c) {
     case('M'): return MONSTERA;
@@ -82,7 +82,7 @@ Item* lookup_item(const ITEM_ID id) {
   return Inventory[id];
 }
 
-Cart add_to_cart(Cart cart, Item* plant, ITEM_ID id, Amount amount) {
+Cart add_to_cart(const ITEM_ID id, Item* plant, const Amount amount, Cart cart) {
   // Queue the purchase
   Item purchase = { plant->name, amount, plant->price };
 
@@ -91,7 +91,8 @@ Cart add_to_cart(Cart cart, Item* plant, ITEM_ID id, Amount amount) {
   
   // If we already have one of that item id in our bucket
   if (hashmap_contains(cart, id)) {
-    cart[id].quantity += amount; // Just add the amounts together
+    // Just add the amounts together
+    cart[id].quantity += amount;
   } else {
     // Add to cart
     cart[id] = purchase;
@@ -101,7 +102,7 @@ Cart add_to_cart(Cart cart, Item* plant, ITEM_ID id, Amount amount) {
 
 // User Input Functions
 void display_option(const char choice, const char* option) {
-  char choice_alt = toupper(choice);
+  const char choice_alt = toupper(choice);
   printf("\t[%c|%c] for %s\n", choice_alt, choice, option);
 };
 
@@ -126,8 +127,8 @@ auto get_user_input() {
   puts("Welcome to Tom's Nursery Shop");
   while(choice != 'A') {
     choice = toupper(get_user_choice());
-    ITEM_ID id = get_item_id(choice);
-    Item* plant = lookup_item(id);
+    const ITEM_ID id = get_item_id(choice);
+    const Item* plant = lookup_item(id);
     ln();
     if (plant == NULL) {
       // If the plant choice is invalid
@@ -150,7 +151,7 @@ auto get_user_input() {
       printf("Amount Available: %d\n", plant->quantity);
       continue; // Return to prompt
     } 
-    cart = add_to_cart(cart, plant, id, amount);
+    cart = add_to_cart(id, (Item*) plant, amount, cart);
     ln();
   }
   return cart;
