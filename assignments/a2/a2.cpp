@@ -47,7 +47,6 @@ typedef struct Plant {
 } Plant;
 
 // Make const/nonconst
-//Plant None          = {NONE, "", 0, 0};
 Plant Monstera      = {MONSTERA     , "Monstera"    , PLANT_STOCK[0], PLANT_PRICES[0]};
 Plant Philodendron  = {PHILODENDRON , "Philodendron", PLANT_STOCK[1], PLANT_PRICES[1]};
 Plant Hoya          = {HOYA         , "Hoya"        , PLANT_STOCK[2], PLANT_PRICES[2]};
@@ -110,19 +109,15 @@ auto get_user_input() {
       printf("Amount Available: %d\n", item.quantity);
     } else {
       // Queue the purchase
-      //Plant purchase = { plant->type, Item { item.name, amount, item.price }};
       Item purchase = { item.name, amount, item.price };
 
       // Deduct the stock
       item.quantity -= amount;
       
       if (found_in_hashmap(cart, plant->type)) {
-        //cart.at(plant->type).quantity += amount;
         cart[plant->type].quantity += amount;
       } else {
         // Add to cart
-        //cart.push_back(purchase);
-        //cart.insert({ plant->type, purchase });
         cart[plant->type] = purchase;
       }
     }
@@ -130,14 +125,6 @@ auto get_user_input() {
   }
   return cart;
 }
-
-//Cart batch_cart(Cart cart) {
-  //for (auto purchase: cart) {
-    //switch(purchase.type) {
-      //case(MONSTERA): 
-    //}
-  //}
-//}
 
 // Calculation
 double calc_cost(Item item) {
@@ -147,10 +134,8 @@ double calc_cost(Item item) {
 // Sum the cost of the goods
 double calc_subtotal_cost(Cart cart) {
   double cost = 0;
-  for (auto [_, item]: cart) {
-    //Item item = plant.item;
+  for (auto [_, item]: cart)
     cost += calc_cost(item);
-  }
   return cost;
 }
 
@@ -180,23 +165,15 @@ void print_receipt(Cart cart) {
 
   printf("Total amount before tax is $%.*f\n", PRECISION, subtotal);
   printf("Total amount after tax is $%.*f\n", PRECISION, total);
-
-  //std::cout << "Total amount before tax is $" << subtotal << std::endl;
-  //std::cout << "Total amount after tax is $" << total << std::endl;
-  //printf("Total amount before tax is %s", printf(amount_format, subtotal));
-  //printf("Total amount after tax is %s", printf(amount_format, total));
   
   puts("");
   puts("Thank you! Please come again!");
 }
-
-
 
 // Part II
 // Part III
 
 int main() {
   Cart cart = get_user_input();
-  //Cart cart = {};
   print_receipt(cart);
 }
