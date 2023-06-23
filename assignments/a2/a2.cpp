@@ -12,30 +12,31 @@
 #include <string>
 
 // Part I: Tom's Nursery Shop
-typedef unsigned int Amount;
-typedef double Price;
 
 // Constants
 const unsigned int PRECISION = 3;
 
 // Taxes
-// Tax amounts in B.C
+// Note: These are the tax amounts in B.C
 const double PST = 0.07;
 const double GST = 0.05;
 
-// Program Variants
-enum PLANT_TYPE {
-  NONE,
-  MONSTERA,
-  PHILODENDRON,
-  HOYA,
-};
+// Types
+typedef unsigned int Amount;
+typedef double Price;
 
 typedef struct Item {
   const char* name;
   Amount quantity;
   Price price;
 } Item;
+
+enum PLANT_TYPE {
+  NONE,
+  MONSTERA,
+  PHILODENDRON,
+  HOYA,
+};
 
 // Plants
 Item Monstera      = {"Monstera"    , 20, 11.50};
