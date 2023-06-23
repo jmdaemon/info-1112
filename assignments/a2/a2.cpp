@@ -224,11 +224,13 @@ void show_loyalty_points(const char* username, Cart cart) {
 // Part III: Print Table Receipt
 
 // Constants
-const unsigned int COL1_WIDTH = 16;
-const unsigned int COL2_WIDTH = 10;
-const unsigned int COL3_WIDTH = 10;
-const unsigned int COL4_WIDTH = 8;
-const unsigned int NAME_FIELD = COL1_WIDTH * 4;
+const unsigned int COL_WIDTH[4] = {
+  16,
+  10,
+  10,
+  10,
+};
+const unsigned int NAME_FIELD = COL_WIDTH[0] * 4;
 
 // Prints a receipt in the following format:
 // Customer       [name]
@@ -247,24 +249,25 @@ void print_receipt_table(const char* username, Cart cart) {
   // Print columns
   auto print_col = [](int width, auto text)
     { std::cout << std::left << std::setw(width) << text; };
-  auto print_col1 = [&](auto text) { print_col(COL1_WIDTH, text); };
-  auto print_col2 = [&](auto text) { print_col(COL2_WIDTH, text); };
-  auto print_col3 = [&](auto text) { print_col(COL3_WIDTH, text); };
-  auto print_col4 = [&](auto text) { print_col(COL4_WIDTH, text); };
+  auto print_col1 = [&](auto text) { print_col(COL_WIDTH[0], text); };
+  auto print_col2 = [&](auto text) { print_col(COL_WIDTH[1], text); };
+  auto print_col3 = [&](auto text) { print_col(COL_WIDTH[2], text); };
+  auto print_col4 = [&](auto text) { print_col(COL_WIDTH[3], text); };
 
   // Print rows
   auto print_2col_row = [&](auto col1, auto col2)
     { print_col1(col1); print_col2(col2); puts(""); };
-  auto print_4col_row = [&](auto col1, auto col2, auto col3, auto col4) {
-    print_col1(col1); print_col2(col2);
-    print_col3(col3); print_col4(col4); puts("");
-  };
+  auto print_4col_row = [&](auto col1, auto col2, auto col3, auto col4)
+    { print_col1(col1); print_col2(col2); print_col3(col3); print_col4(col4); puts(""); };
 
   // Print horizontal line
   auto print_hline = [&]() {
     std::cout << std::setfill('=');
     print_4col_row("", "", "", "");
     std::cout << std::setfill(' ');
+  };
+  auto print_empty_row = [&]() {
+    print_4col_row("", "", "", "");
   };
 
   left_justify_output();
@@ -273,8 +276,8 @@ void print_receipt_table(const char* username, Cart cart) {
 
   puts("Customer Receipt");
   print_hline();
-  print_col1("Customer"); print_col(COL1_WIDTH * 4, username); puts("");
-  print_4col_row("Plant", "Amount", "Cost", "Stock Left");
+  print_col1("Customer"); print_col(NAME_FIELD, username); puts("");
+  print_4col_row("Plant", "Quantity", "Cost ($)", "Stock Left");
   for (auto [type, item]: cart) {
     int amount = item.quantity;
     const char* name = item.name;
@@ -285,9 +288,16 @@ void print_receipt_table(const char* username, Cart cart) {
   double subtotal = calc_subtotal_cost(cart);
   double total = calc_total_cost(subtotal);
 
+  //print_empty_row();
   print_hline();
+  print_2col_row("Cost", "Amount ($)");
   print_2col_row("Subtotal", subtotal);
   print_2col_row("Total", total);
+  print_empty_row();
+
+  // Show Loyalty Points
+  Points points = calc_loyalty_points(cart);
+  print_2col_row("Loyalty Points", points);
 
   puts("");
   puts("Thank you! Please come again!");
