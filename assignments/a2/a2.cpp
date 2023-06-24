@@ -220,16 +220,12 @@ std::string get_full_name() {
   return name;
 }
 
-Points calc_loyalty_points(const Cart cart) {
-  Points points = 0;
-  for (auto [_, item]: cart)
-    if (item.quantity > 1) 
-      points += round(item.price / 0.75);
-  return points;
+Points calc_loyalty_points(const Price subtotal) {
+  return round(subtotal / 0.75);
 }
 
-void show_loyalty_points(Name username, const Cart cart) {
-  const Points points = calc_loyalty_points(cart);
+void show_loyalty_points(Name username, const Price subtotal) {
+  const Points points = calc_loyalty_points(subtotal);
   printf("You earned %ld points on this purchase, %s.\n", points, username);
 }
 
@@ -302,7 +298,7 @@ void print_receipt_table(Name username, const Cart cart) {
   print_empty_row();
 
   // Show Loyalty Points
-  const Points points = calc_loyalty_points(cart);
+  const Points points = calc_loyalty_points(subtotal);
   print_row_2cols("Loyalty Points", points);
 
   ln();
@@ -330,8 +326,9 @@ int main(int argc, char** argv) {
     // Part II:
     const std::string name = get_full_name();
     const Cart cart = get_user_input();
+    const Price subtotal = calc_subtotal_cost(cart);
     print_receipt(cart);
-    show_loyalty_points(name.c_str(), cart);
+    show_loyalty_points(name.c_str(), subtotal);
   } else if (strequals(argv[1], "pretty-receipt")) {
     // Part III:
     const std::string name = get_full_name();
