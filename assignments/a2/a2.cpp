@@ -184,8 +184,13 @@ Price calc_total_cost(const Price cost) {
   return cost + (cost * (GST + PST));
 }
 
+void print_greeting() {
+  ln();
+  puts("Thank you! Please come again!");
+}
+
 void print_receipt(const Cart cart) {
-  auto print_plant_cost = [&](const Amount amount, Name name, const Price cost) {
+  auto print_plant_cost = [](const Amount amount, Name name, const Price cost) {
     printf("%d %s plants cost $%.*f\n", amount, name, PRECISION, cost);
   };
 
@@ -203,9 +208,6 @@ void print_receipt(const Cart cart) {
 
   printf("Total amount before tax is $%.*f\n", PRECISION, subtotal);
   printf("Total amount after tax is $%.*f\n", PRECISION, total);
-  
-  ln();
-  puts("Thank you! Please come again!");
 }
 
 // Part II: Loyalty Program Feature
@@ -300,9 +302,6 @@ void print_receipt_table(Name username, const Cart cart) {
   // Show Loyalty Points
   const Points points = calc_loyalty_points(subtotal);
   print_row_2cols("Loyalty Points", points);
-
-  ln();
-  puts("Thank you! Please come again!");
 }
 
 int main(int argc, char** argv) {
@@ -335,5 +334,6 @@ int main(int argc, char** argv) {
     const Cart cart = get_user_input();
     print_receipt_table(name.c_str(), cart);
   }
+  print_greeting();
   return 0;
 }
