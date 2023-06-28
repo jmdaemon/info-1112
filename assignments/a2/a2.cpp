@@ -216,10 +216,19 @@ void print_receipt(const Cart cart) {
 typedef unsigned long Points;
 
 std::string get_full_name() {
+  std::cin.ignore();
   std::string name;
   printf("Enter your full name: ");
   std::getline(std::cin, name, '\n');
   return name;
+}
+
+char get_loyalty_status() {
+  char loyalty_customer;
+  printf("Are you a loyalty customer? [Y/N]: ");
+  std::cin >> loyalty_customer;
+  loyalty_customer = toupper(loyalty_customer);
+  return loyalty_customer;
 }
 
 Points calc_loyalty_points(const Price subtotal) {
@@ -229,6 +238,22 @@ Points calc_loyalty_points(const Price subtotal) {
 void show_loyalty_points(Name username, const Price subtotal) {
   const Points points = calc_loyalty_points(subtotal);
   printf("You earned %ld points on this purchase, %s.\n", points, username);
+}
+
+void print_receipt_loyalty_points(const Cart cart) {
+  char status = get_loyalty_status();
+  
+  std::string name;
+  switch(status) {
+    case('Y'): name = get_full_name(); break;
+    case('N'): name = ""; break;
+  }
+
+  print_receipt(cart);
+  if (!name.empty()) {
+    const Price subtotal = calc_subtotal_cost(cart);
+    show_loyalty_points(name.c_str(), subtotal);
+  }
 }
 
 // Part III: Print Table Receipt
@@ -323,11 +348,12 @@ int main(int argc, char** argv) {
     print_receipt(cart);
   } else if (strequals(argv[1], "loyalty")) {
     // Part II:
-    const std::string name = get_full_name();
+    //const std::string name = get_full_name();
     const Cart cart = get_user_input();
-    const Price subtotal = calc_subtotal_cost(cart);
-    print_receipt(cart);
-    show_loyalty_points(name.c_str(), subtotal);
+    //const Price subtotal = calc_subtotal_cost(cart);
+    //print_receipt(cart);
+    //show_loyalty_points(name.c_str(), subtotal);
+    print_receipt_loyalty_points(cart);
   } else if (strequals(argv[1], "pretty-receipt")) {
     // Part III:
     const std::string name = get_full_name();
