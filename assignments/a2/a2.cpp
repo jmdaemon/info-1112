@@ -290,7 +290,6 @@ void print_receipt_table(const Cart cart) {
 
   // Print horizontal line
   auto print_hline = [&]()      { set_fill_char('='); print_row_4cols("", "", "", ""); set_fill_char(' '); };
-  auto print_empty_row = [&]()  { print_row_4cols("", "", "", ""); };
 
   // Get loyalty status
   char status = get_loyalty_status();
@@ -330,7 +329,7 @@ void print_receipt_table(const Cart cart) {
   // Show customer's earned loyalty points
   if (!name.empty()) {
     const Points points = calc_loyalty_points(subtotal);
-    print_empty_row();
+    ln();
     print_row_2cols("Loyalty Points", points);
   }
 
