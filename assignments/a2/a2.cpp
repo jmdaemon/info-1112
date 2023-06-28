@@ -215,11 +215,15 @@ void print_receipt(const Cart cart) {
 
 typedef unsigned long Points;
 
-std::string get_full_name() {
-  std::cin.ignore();
+std::string get_full_name(const char status) {
   std::string name;
-  printf("Enter your full name: ");
-  std::getline(std::cin, name, '\n');
+  if (status == 'Y') {
+    std::cin.ignore();
+    printf("Enter your full name: ");
+    std::getline(std::cin, name, '\n');
+  } else {
+    name = "";
+  }
   return name;
 }
 
@@ -242,13 +246,8 @@ void show_loyalty_points(Name username, const Price subtotal) {
 
 void print_receipt_loyalty_points(const Cart cart) {
   char status = get_loyalty_status();
+  std::string name = get_full_name(status);
   
-  std::string name;
-  switch(status) {
-    case('Y'): name = get_full_name(); break;
-    case('N'): name = ""; break;
-  }
-
   print_receipt(cart);
   if (!name.empty()) {
     const Price subtotal = calc_subtotal_cost(cart);
@@ -270,7 +269,7 @@ const unsigned int COL_WIDTH[4] = {
 // NOTE:
 // Keep in mind that a receipt is not very wide horizontally
 // So we need to print this table longer vertically instead
-void print_receipt_table(Name username, const Cart cart) {
+void print_receipt_table(const Cart cart) {
   // Helper lambda functions for displaying the receipt in a table
   auto left_justify_output    = []() { std::cout << std::left; };
   auto right_justify_output   = []() { std::cout << std::right; };
@@ -293,6 +292,11 @@ void print_receipt_table(Name username, const Cart cart) {
   auto print_hline = [&]()      { set_fill_char('='); print_row_4cols("", "", "", ""); set_fill_char(' '); };
   auto print_empty_row = [&]()  { print_row_4cols("", "", "", ""); };
 
+  // Get loyalty status
+  char status = get_loyalty_status();
+  std::string name = get_full_name(status);
+  ln();
+
   // Setup output for table format
   left_justify_output();
   show_n_decimal_places(PRECISION); 
@@ -302,7 +306,7 @@ void print_receipt_table(Name username, const Cart cart) {
   // Print receipt header
   puts("Customer Receipt");
   print_hline();
-  print_row_2cols("Customer", username);
+  print_row_2cols("Customer", name.c_str());
 
   // Print receipt body
   print_row_4cols("Item", "Quantity", "Cost ($)", "Stock Left");
@@ -322,11 +326,14 @@ void print_receipt_table(Name username, const Cart cart) {
   print_row_2cols("Cost", "Amount ($)");
   print_row_2cols("Subtotal", subtotal);
   print_row_2cols("Total", total);
-  print_empty_row();
 
   // Show Loyalty Points
-  const Points points = calc_loyalty_points(subtotal);
-  print_row_2cols("Loyalty Points", points);
+  if (!name.empty()) {
+    //const Price subtotal = calc_subtotal_cost(cart);
+    const Points points = calc_loyalty_points(subtotal);
+    print_empty_row();
+    print_row_2cols("Loyalty Points", points);
+  }
 }
 
 int main(int argc, char** argv) {
@@ -348,17 +355,15 @@ int main(int argc, char** argv) {
     print_receipt(cart);
   } else if (strequals(argv[1], "loyalty")) {
     // Part II:
-    //const std::string name = get_full_name();
     const Cart cart = get_user_input();
-    //const Price subtotal = calc_subtotal_cost(cart);
-    //print_receipt(cart);
-    //show_loyalty_points(name.c_str(), subtotal);
     print_receipt_loyalty_points(cart);
   } else if (strequals(argv[1], "pretty-receipt")) {
     // Part III:
-    const std::string name = get_full_name();
     const Cart cart = get_user_input();
-    print_receipt_table(name.c_str(), cart);
+    print_receipt_table(cart);
+  } else {
+    puts("No mode given. Exiting...");
+    return -1;
   }
   print_greeting();
   return 0;
