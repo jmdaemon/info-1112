@@ -215,6 +215,14 @@ void print_receipt(const Cart cart) {
 
 typedef unsigned long Points;
 
+char get_loyalty_status() {
+  char loyalty_customer;
+  printf("Are you a loyalty customer? [Y/N]: ");
+  std::cin >> loyalty_customer;
+  loyalty_customer = toupper(loyalty_customer);
+  return loyalty_customer;
+}
+
 std::string get_full_name(const char status) {
   std::string name;
   if (status == 'Y') {
@@ -225,14 +233,6 @@ std::string get_full_name(const char status) {
     name = "";
   }
   return name;
-}
-
-char get_loyalty_status() {
-  char loyalty_customer;
-  printf("Are you a loyalty customer? [Y/N]: ");
-  std::cin >> loyalty_customer;
-  loyalty_customer = toupper(loyalty_customer);
-  return loyalty_customer;
 }
 
 Points calc_loyalty_points(const Price subtotal) {
@@ -265,7 +265,6 @@ const unsigned int COL_WIDTH[4] = {
   10,
 };
 // Display customer's receipt in an aligned table
-//
 // NOTE:
 // Keep in mind that a receipt is not very wide horizontally
 // So we need to print this table longer vertically instead
@@ -284,7 +283,8 @@ void print_receipt_table(const Cart cart) {
   auto print_col4 = [&](auto text) { print_col(COL_WIDTH[3], text); };
 
   // Print rows
-  auto print_row_2cols = [&](auto col1, auto col2) { print_col1(col1); print_col2(col2); ln(); };
+  auto print_row_2cols = [&](auto col1, auto col2)
+    { print_col1(col1); print_col2(col2); ln(); };
   auto print_row_4cols = [&](auto col1, auto col2, auto col3, auto col4)
     { print_col1(col1); print_col2(col2); print_col3(col3); print_col4(col4); ln(); };
 
@@ -327,13 +327,15 @@ void print_receipt_table(const Cart cart) {
   print_row_2cols("Subtotal", subtotal);
   print_row_2cols("Total", total);
 
-  // Show Loyalty Points
+  // Show customer's earned loyalty points
   if (!name.empty()) {
-    //const Price subtotal = calc_subtotal_cost(cart);
     const Points points = calc_loyalty_points(subtotal);
     print_empty_row();
     print_row_2cols("Loyalty Points", points);
   }
+
+  // Reset output justification
+  right_justify_output();
 }
 
 int main(int argc, char** argv) {
