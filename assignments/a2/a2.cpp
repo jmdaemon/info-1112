@@ -226,7 +226,7 @@ char get_loyalty_status() {
 std::string get_full_name(const char status) {
   std::string name;
   if (status == 'Y') {
-    std::cin.ignore();
+    reset_stdin();
     printf("Enter your full name: ");
     std::getline(std::cin, name, '\n');
   } else {
