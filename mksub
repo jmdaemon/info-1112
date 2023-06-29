@@ -1,4 +1,6 @@
 #!/bin/bash
 
 src=$1
-./mkzip "$src" && ./rename "$src"
+
+OUTPUT=$(basename "$src")
+./mkzip "$src" && ./rename "$OUTPUT"
