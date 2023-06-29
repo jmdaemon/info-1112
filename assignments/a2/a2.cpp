@@ -339,11 +339,11 @@ void print_receipt_table(const Cart cart) {
 
 // Main
 void show_usage(const char* program_name) {
-  puts("Please provide a mode to run the program.");
+  puts("Please provide a valid mode to run the program.");
   puts("Available modes are: ");
-  puts("\tnormal        : Part I of the assignment");
-  puts("\tloyalty       : Part II of the assignment");
-  puts("\tpretty-receipt: Part III of the assignment");
+  puts("\tnormal        : Run part I of the assignment");
+  puts("\tloyalty       : Run part II of the assignment");
+  puts("\tpretty-receipt: Run part III of the assignment");
   printf("Usage: %s [normal|loyalty|pretty-receipt]\n", program_name);
 }
 
@@ -368,6 +368,7 @@ int main(int argc, char** argv) {
     const Cart cart = get_user_input();
     print_receipt_table(cart);
   } else {
+    puts("Error: Invalid mode given.");
     show_usage(argv[0]);
     return -1;
   }
