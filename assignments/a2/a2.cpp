@@ -128,7 +128,7 @@ char get_user_choice() {
 }
 
 auto get_user_input() {
-  char choice;
+  char choice{};
   Cart cart;
 
   puts("Welcome to Tom's Nursery Shop");
@@ -269,7 +269,7 @@ const unsigned int COL_WIDTH[4] = {
 // Keep in mind that a receipt is not very wide horizontally
 // So we need to print this table longer vertically instead
 void print_receipt_table(const Cart cart) {
-  // Helper lambda functions for displaying the receipt in a table
+  // Helper lambda functions for preparing the output
   auto left_justify_output    = []() { std::cout << std::left; };
   auto right_justify_output   = []() { std::cout << std::right; };
   auto show_n_decimal_places  = [](const unsigned int n) { std::cout << std::fixed << std::setprecision(n); };
@@ -289,7 +289,7 @@ void print_receipt_table(const Cart cart) {
     { print_col1(col1); print_col2(col2); print_col3(col3); print_col4(col4); ln(); };
 
   // Print horizontal line
-  auto print_hline = [&]()      { set_fill_char('='); print_row_4cols("", "", "", ""); set_fill_char(' '); };
+  auto print_hline = [&]() { set_fill_char('='); print_row_4cols("", "", "", ""); set_fill_char(' '); };
 
   // Get loyalty status
   char status = get_loyalty_status();
