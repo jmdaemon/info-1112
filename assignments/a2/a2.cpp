@@ -305,7 +305,8 @@ void print_receipt_table(const Cart cart) {
   // Print receipt header
   puts("Customer Receipt");
   print_hline();
-  print_row_2cols("Customer", name.c_str());
+  if (!name.empty())
+    print_row_2cols("Customer", name.c_str());
 
   // Print receipt body
   print_row_4cols("Item", "Quantity", "Cost ($)", "Stock Left");
