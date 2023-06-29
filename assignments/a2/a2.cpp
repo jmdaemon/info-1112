@@ -337,16 +337,21 @@ void print_receipt_table(const Cart cart) {
   right_justify_output();
 }
 
+// Main
+void show_usage(const char* program_name) {
+  puts("Please provide a mode to run the program.");
+  puts("Available modes are: ");
+  puts("\tnormal        : Part I of the assignment");
+  puts("\tloyalty       : Part II of the assignment");
+  puts("\tpretty-receipt: Part III of the assignment");
+  printf("Usage: %s [normal|loyalty|pretty-receipt]\n", program_name);
+}
+
 int main(int argc, char** argv) {
   // Process command line arguments
   if ((argc < 2) || (argc > 2)) {
     puts("Error. Invalid number of arguments.");
-    puts("Please provide a mode to run the program.");
-    puts("Available modes are: ");
-    puts("\tnormal        : Part I of the assignment");
-    puts("\tloyalty       : Part II of the assignment");
-    puts("\tpretty-receipt: Part III of the assignment");
-    printf("Usage: %s [normal|loyalty|pretty-receipt]\n", argv[0]);
+    show_usage(argv[0]);
     return -1;
   }
 
@@ -363,7 +368,7 @@ int main(int argc, char** argv) {
     const Cart cart = get_user_input();
     print_receipt_table(cart);
   } else {
-    puts("No mode given. Exiting...");
+    show_usage(argv[0]);
     return -1;
   }
   print_greeting();
