@@ -1,0 +1,6 @@
+#!/bin/bash
+
+source ./course.sh
+OUTPUT_FILEFORMAT="${name}_${student_number}.zip"
+
+echo "$OUTPUT_FILEFORMAT" | tr -d '\n' | xclip -sel clip
