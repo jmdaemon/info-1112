@@ -55,9 +55,11 @@ std::fstream create_input_file(const char* filepath) {
 int main() {
   const NatNumber MIN = 1;
   const NatNumber MAX = 10;
+  const char* OUTPUT_FILE = "output.txt";
+  const char* COUNTS_FILE = "counts.txt";
   
   // Create file
-  std::ofstream output_file = create_output_file("output.txt");
+  std::ofstream output_file = create_output_file(OUTPUT_FILE);
 
   // Generate random numbers
   set_random_seed();
@@ -71,7 +73,7 @@ int main() {
   output_file.close();
 
   // Read from the input file
-  std::fstream input_file = create_input_file("output.txt");
+  std::fstream input_file = create_input_file(OUTPUT_FILE);
 
   // Count the input numbers
   int random_number;
@@ -86,7 +88,7 @@ int main() {
     printf("There are %d %d's\n", count, number);
 
   // Write to output file
-  std::ofstream counts_file = create_output_file("counts.txt");
+  std::ofstream counts_file = create_output_file(COUNTS_FILE);
   const NatNumber WIDTH = 4;
   const auto STAR = '*';
   const auto SPACE = ' ';
