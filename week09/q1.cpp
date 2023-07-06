@@ -4,9 +4,11 @@
 #include <iostream>
 #include <vector>
 
+// Types
 typedef unsigned int NatNumber ;
 typedef std::vector<NatNumber> RandomNumbers;
 
+// Functions
 void set_random_seed() {
   srand(time(0));
 }
@@ -23,7 +25,7 @@ RandomNumbers gen_random_numbers(const NatNumber min, const NatNumber max, const
   return random_numbers;
 }
 
-
+// Main
 int main() {
   const NatNumber MIN = 1;
   const NatNumber MAX = 10;
