@@ -26,7 +26,7 @@ int gen_random_number(const NatNumber min, const NatNumber max) {
 
 RandomNumbers gen_random_numbers(const NatNumber min, const NatNumber max, const NatNumber n) {
   RandomNumbers random_numbers;
-  for (auto i = 0; i < 25; i++) {
+  for (auto i = 0; i < n; i++) {
     random_numbers.push_back(gen_random_number(min, max));
   }
   return random_numbers;
