@@ -3,10 +3,12 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <map>
 
 // Types
-typedef unsigned int NatNumber ;
+typedef unsigned int NatNumber;
 typedef std::vector<NatNumber> RandomNumbers;
+typedef std::map<NatNumber, NatNumber> NumberCounts;
 
 // Functions
 void set_random_seed() {
@@ -47,5 +49,25 @@ int main() {
 
   // Ensure the file is always closed
   output_file.close();
+
+  // Read from the input file
+  std::fstream input_file("output.txt");
+  if (!input_file) {
+    puts("Error: File could not be found");
+    exit(EXIT_FAILURE);
+  }
+
+  // Count the input numbers
+  int random_number;
+  NumberCounts number_counts;
+  while(!input_file.eof()) {
+    input_file >> random_number;
+    number_counts[random_number]++;
+  }
+
+  // Show the input numbers
+  for (auto [number, count]: number_counts)
+    printf("There are %d %d's\n", count, number);
+
   return EXIT_SUCCESS;
 }
