@@ -86,10 +86,16 @@ int main() {
     printf("There are %d %d's\n", count, number);
 
   // Write to output file
-  std::ofstream counts_file = create_output_file("number_counts.txt");
+  std::ofstream counts_file = create_output_file("counts.txt");
   const NatNumber WIDTH = 4;
+  const std::string STAR = "*";
   for (auto [number, count]: number_counts) {
-    counts_file << std::left << std::setw(WIDTH) << number  << " = " << std::setw(WIDTH) << count << std::endl;
+    //counts_file << std::left << std::setw(WIDTH) << number  << " = " << std::setw(WIDTH) << count << std::endl;
+    counts_file << std::left << std::setw(WIDTH) << number  << " = ";
+    //counts_file << std::setw(WIDTH);
+    for (auto i = 0; i <= count; i++)
+      counts_file << STAR;
+    counts_file << std::endl;
   }
 
   return EXIT_SUCCESS;
