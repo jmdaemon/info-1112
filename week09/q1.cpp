@@ -5,6 +5,10 @@
 #include <vector>
 #include <map>
 
+// Constants
+const char* ERROR_FILE_CREATE = "Error: File could not be created";
+const char* ERROR_FILE_OPEN   = "Error: File could not be found";
+
 // Types
 typedef unsigned int NatNumber;
 typedef std::vector<NatNumber> RandomNumbers;
@@ -27,17 +31,33 @@ RandomNumbers gen_random_numbers(const NatNumber min, const NatNumber max, const
   return random_numbers;
 }
 
+// Ensure a file exists
+template <typename T>
+T ensure_file_exists(const char* filepath, const char* error_msg) {
+  T file(filepath);
+  if (!file) {
+    puts(error_msg);
+    exit(EXIT_FAILURE);
+  }
+  return file;
+}
+
+std::ofstream create_output_file(const char* filepath) {
+  return ensure_file_exists<std::ofstream>(filepath, ERROR_FILE_CREATE);
+}
+
+std::fstream create_input_file(const char* filepath) {
+  return ensure_file_exists<std::fstream>(filepath, ERROR_FILE_OPEN);
+}
+
 // Main
 int main() {
   const NatNumber MIN = 1;
   const NatNumber MAX = 10;
+
   
   // Create file
-  std::ofstream output_file("output.txt");
-  if (!output_file) {
-    puts("Error: File could not be created");
-    exit(EXIT_FAILURE);
-  }
+  std::ofstream output_file = create_output_file("output.txt");
 
   // Generate random numbers
   set_random_seed();
@@ -51,11 +71,7 @@ int main() {
   output_file.close();
 
   // Read from the input file
-  std::fstream input_file("output.txt");
-  if (!input_file) {
-    puts("Error: File could not be found");
-    exit(EXIT_FAILURE);
-  }
+  std::fstream input_file = create_input_file("output.txt");
 
   // Count the input numbers
   int random_number;
@@ -68,6 +84,9 @@ int main() {
   // Show the input numbers
   for (auto [number, count]: number_counts)
     printf("There are %d %d's\n", count, number);
+
+  // Write to output file
+  //std::ofstream counts_ofile = create_output_file("number_counts.txt");
 
   return EXIT_SUCCESS;
 }
