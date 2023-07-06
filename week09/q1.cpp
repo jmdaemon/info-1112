@@ -2,6 +2,7 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <map>
 
@@ -54,7 +55,6 @@ std::fstream create_input_file(const char* filepath) {
 int main() {
   const NatNumber MIN = 1;
   const NatNumber MAX = 10;
-
   
   // Create file
   std::ofstream output_file = create_output_file("output.txt");
@@ -86,7 +86,11 @@ int main() {
     printf("There are %d %d's\n", count, number);
 
   // Write to output file
-  //std::ofstream counts_ofile = create_output_file("number_counts.txt");
+  std::ofstream counts_file = create_output_file("number_counts.txt");
+  const NatNumber WIDTH = 4;
+  for (auto [number, count]: number_counts) {
+    counts_file << std::left << std::setw(WIDTH) << number  << " = " << std::setw(WIDTH) << count << std::endl;
+  }
 
   return EXIT_SUCCESS;
 }
