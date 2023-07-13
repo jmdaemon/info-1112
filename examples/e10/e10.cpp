@@ -33,9 +33,34 @@ double davg(double (&array)[SIZE]) {
   return sum / (double) SIZE;
 }
 
+// Search for a specific value based on a target
+template <typename T>
+int bsearch (T array[], T left, T, T right, T target) {
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+ 
+        // Check if x is present at mid
+        if (array[mid] == target)
+            return mid;
+ 
+        // If x greater, ignore left half
+        if (array[mid] < target)
+            left = mid + 1;
+ 
+        // If x is smaller, ignore right half
+        else
+            right = mid - 1;
+    }
+ 
+    // If we reach here, then element was not present
+    return -1;
+}
+
 // Find the position of the minimum value in an array
 // If the array is empty, the value returned will be -1
-int d_min_index(double array[], size_t size) {
+int bsearch_double_min(double array[], size_t size) {
+  if (size <= 0) return -1;
+
   size_t min = -1;
   for (size_t i = 0; i < size; i++)
     if (array[min] > array[i])
