@@ -37,17 +37,27 @@ double davg(double array[], size_t size) {
 double d_min(double array[], size_t size) {
   size_t min = -1;
   for (size_t i = 0; i < size; i++)
-    if (min < array[i])
+    if (min > array[i])
       min = array[i];
   return min;
 }
 
-size_t main() {
+// Find the maximum value in an array
+// If the array is empty, the maximum returned will be -1
+double d_max(double array[], size_t size) {
+  size_t max = -1;
+  for (size_t i = 0; i < size; i++)
+    if (max < array[i])
+      max = array[i];
+  return max;
+}
+
+int main() {
   const size_t MAX = 100;
   const size_t MIN = 2;
 
   set_random_seed();
   const size_t n = 20;
   for (size_t i = 0; i < n; i++)
-    prsize_tf("%f\n", gen_random_double(MIN, MAX));
+    printf("%f\n", gen_random_double(MIN, MAX));
 }
