@@ -15,7 +15,7 @@ double gen_random_distribution() {
 // Generate a random double between min and max
 double gen_random_double(double min, double max) {
   double distribution = gen_random_distribution();
-  return distribution * max + min;
+  return distribution * (max - min) + min;
 }
 
 // 2: Comparing float values
