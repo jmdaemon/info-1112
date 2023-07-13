@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdio>
 
+// 1:
+// Set the seed for random number generation
 void set_random_seed() {
   srand(time(0));
 }
