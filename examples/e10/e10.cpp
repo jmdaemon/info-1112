@@ -32,23 +32,23 @@ double davg(double array[], size_t size) {
   return sum / (double) size;
 }
 
-// Find the minimum value in an array
-// If the array is empty, the minimum returned will be -1
-double d_min(double array[], size_t size) {
+// Find the position of the minimum value in an array
+// If the array is empty, the value returned will be -1
+double d_min_index(double array[], size_t size) {
   size_t min = -1;
   for (size_t i = 0; i < size; i++)
     if (min > array[i])
-      min = array[i];
+      min = i;
   return min;
 }
 
-// Find the maximum value in an array
-// If the array is empty, the maximum returned will be -1
-double d_max(double array[], size_t size) {
+// Find the position maximum value in an array
+// If the array is empty, the value returned will be -1
+double d_max_index(double array[], size_t size) {
   size_t max = -1;
   for (size_t i = 0; i < size; i++)
     if (max < array[i])
-      max = array[i];
+      max = i;
   return max;
 }
 
