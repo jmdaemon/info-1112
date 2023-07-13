@@ -37,7 +37,7 @@ double davg(double array[], size_t size) {
 double d_min_index(double array[], size_t size) {
   size_t min = -1;
   for (size_t i = 0; i < size; i++)
-    if (min > array[i])
+    if (array[min] > array[i])
       min = i;
   return min;
 }
@@ -47,7 +47,7 @@ double d_min_index(double array[], size_t size) {
 double d_max_index(double array[], size_t size) {
   size_t max = -1;
   for (size_t i = 0; i < size; i++)
-    if (max < array[i])
+    if (array[max] < array[i])
       max = i;
   return max;
 }
