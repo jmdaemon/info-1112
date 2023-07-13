@@ -22,31 +22,15 @@ double gen_random_double(double min, double max) {
 }
 
 // 2: Comparing float values
-template <size_t T>
-//double dsum(std::array<double, T> array) {
-double dsum(double (&array)[T]) {
+template <size_t SIZE>
+double dsum(double (&array)[SIZE]) {
   return std::accumulate(std::begin(array), std::end(array), 0.0, [] (double x, double y) { return x + y; });
-
-//double dsum(std::array<double, 10> array, size_t size) {
-  //return std::accumulate(std::begin(array), std::end(array), 0.0, [] (double x, double y) { return x + y; });
-
-//double dsum(double array[], size_t size) {
-  //int sum = 0;
-  //std::for_each(std::begin(array), std::end(array), [&sum](int v) { sum += v; });
-  //return sum;
-
-  //double sum = 0;
-  //for (size_t i = 0; i < size; i++) {
-    //sum += array[i];
-  //}
-  //return sum;
 }
 
-//double davg(double array[], size_t size) {
-template <size_t size>
-double davg(double (&array)[size]) {
+template <size_t SIZE>
+double davg(double (&array)[SIZE]) {
   double sum = dsum(array);
-  return sum / (double) size;
+  return sum / (double) SIZE;
 }
 
 // Find the position of the minimum value in an array
@@ -69,12 +53,21 @@ int d_max_index(double array[], size_t size) {
   return max;
 }
 
+template <size_t SIZE>
+void populate_random_numbers(double (&array)[SIZE], double min, double max) {
+  for (int i = 0; i < SIZE; i++)
+    array[i] = gen_random_double(min, max);
+}
+
 int main() {
   const size_t MAX = 100;
   const size_t MIN = 2;
 
-  set_random_seed();
   const size_t n = 20;
-  for (size_t i = 0; i < n; i++)
-    printf("%f\n", gen_random_double(MIN, MAX));
+  double array[n] {};
+  //for (size_t i = 0; i < n; i++)
+    //printf("%f\n", gen_random_double(MIN, MAX));
+
+  set_random_seed();
+  populate_random_numbers(array, MIN, MAX);
 }
