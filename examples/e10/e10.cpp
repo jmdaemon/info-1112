@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <numeric>
 #include <iostream>
 #include <cstdio>
@@ -42,9 +43,7 @@ double davg(double (&array)[SIZE]) {
 template <size_t SIZE>
 int dmin_index(double (&array)[SIZE]) {
   size_t min = -1;
-  for (size_t i = 0; i < SIZE; i++)
-    if (array[min] > array[i])
-      min = i;
+  std::for_each(std::begin(array), std::end(array), [&min](double x) { if (x < min) min = x; });
   return min;
 }
 
@@ -53,9 +52,7 @@ int dmin_index(double (&array)[SIZE]) {
 template <size_t SIZE>
 int dmax_index(double (&array)[SIZE]) {
   size_t max = -1;
-  for (size_t i = 0; i < SIZE; i++)
-    if (array[max] < array[i])
-      max = i;
+  std::for_each(std::begin(array), std::end(array), [&max](double x) { if (x > max) max = x; });
   return max;
 }
 
