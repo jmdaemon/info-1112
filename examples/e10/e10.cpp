@@ -41,7 +41,7 @@ double davg(double (&array)[SIZE]) {
 // Find the position of the minimum value in an array
 // If the array is empty, the value returned will be -1
 template <size_t SIZE>
-int dmin_index(double (&array)[SIZE]) {
+size_t dmin_index(double (&array)[SIZE]) {
   size_t min = -1;
   std::for_each(std::begin(array), std::end(array), [&min](double x) { if (x < min) min = x; });
   return min;
@@ -50,7 +50,7 @@ int dmin_index(double (&array)[SIZE]) {
 // Find the position maximum value in an array
 // If the array is empty, the value returned will be -1
 template <size_t SIZE>
-int dmax_index(double (&array)[SIZE]) {
+size_t dmax_index(double (&array)[SIZE]) {
   size_t max = -1;
   std::for_each(std::begin(array), std::end(array), [&max](double x) { if (x > max) max = x; });
   return max;
