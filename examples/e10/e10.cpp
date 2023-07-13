@@ -1,5 +1,3 @@
-#include <algorithm>
-#include <array>
 #include <numeric>
 #include <iostream>
 #include <cstdio>
@@ -21,7 +19,14 @@ double gen_random_double(double min, double max) {
   return distribution * (max - min) + min;
 }
 
-// 2: Comparing float values
+// 2. Populate Data
+template <size_t SIZE>
+void populate_random_numbers(double (&array)[SIZE], double min, double max) {
+  for (int i = 0; i < SIZE; i++)
+    array[i] = gen_random_double(min, max);
+}
+
+// 3: Comparing float values
 template <size_t SIZE>
 double dsum(double (&array)[SIZE]) {
   return std::accumulate(std::begin(array), std::end(array), 0.0, [] (double x, double y) { return x + y; });
@@ -29,23 +34,15 @@ double dsum(double (&array)[SIZE]) {
 
 template <size_t SIZE>
 double davg(double (&array)[SIZE]) {
-  double sum = dsum(array);
-  return sum / (double) SIZE;
+  return dsum(array) / (double) SIZE;
 }
 
 // Find the position of the minimum value in an array
 // If the array is empty, the value returned will be -1
-
-// Find the position of the minimum value in an array
-int dmin_index(double array[], size_t size) {
-  if (size <= 0) return -1;
-  std::sort(array, array + size);
-r return array[0];
-
-  if (size <= 0) return -1;
-
+template <size_t SIZE>
+int dmin_index(double (&array)[SIZE]) {
   size_t min = -1;
-  for (size_t i = 0; i < size; i++)
+  for (size_t i = 0; i < SIZE; i++)
     if (array[min] > array[i])
       min = i;
   return min;
@@ -53,18 +50,13 @@ r return array[0];
 
 // Find the position maximum value in an array
 // If the array is empty, the value returned will be -1
-int d_max_index(double array[], size_t size) {
+template <size_t SIZE>
+int dmax_index(double (&array)[SIZE]) {
   size_t max = -1;
-  for (size_t i = 0; i < size; i++)
+  for (size_t i = 0; i < SIZE; i++)
     if (array[max] < array[i])
       max = i;
   return max;
-}
-
-template <size_t SIZE>
-void populate_random_numbers(double (&array)[SIZE], double min, double max) {
-  for (int i = 0; i < SIZE; i++)
-    array[i] = gen_random_double(min, max);
 }
 
 int main() {
@@ -73,9 +65,12 @@ int main() {
 
   const size_t n = 20;
   double array[n] {};
-  //for (size_t i = 0; i < n; i++)
-    //printf("%f\n", gen_random_double(MIN, MAX));
 
+  // Populate array
   set_random_seed();
   populate_random_numbers(array, MIN, MAX);
+  
+  int min_index = dmin_index(array);
+  int max_index = dmax_index(array);
+  int avg = davg(array);
 }
