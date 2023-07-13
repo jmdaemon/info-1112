@@ -34,7 +34,7 @@ double davg(double array[], size_t size) {
 
 // Find the position of the minimum value in an array
 // If the array is empty, the value returned will be -1
-double d_min_index(double array[], size_t size) {
+int d_min_index(double array[], size_t size) {
   size_t min = -1;
   for (size_t i = 0; i < size; i++)
     if (array[min] > array[i])
@@ -44,7 +44,7 @@ double d_min_index(double array[], size_t size) {
 
 // Find the position maximum value in an array
 // If the array is empty, the value returned will be -1
-double d_max_index(double array[], size_t size) {
+int d_max_index(double array[], size_t size) {
   size_t max = -1;
   for (size_t i = 0; i < size; i++)
     if (array[max] < array[i])
